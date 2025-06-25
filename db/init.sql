@@ -1,4 +1,3 @@
-CREATE DATABASE IF NOT EXISTS consorcio;
 USE consorcio;
 
 CREATE TABLE clientes (
