@@ -32,3 +32,28 @@ CREATE TABLE noticias (
     id_categoria INT,
     FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria) ON DELETE SET NULL
 );
+
+#------------------ VISTAS ------------------#
+
+#-- Contiene todas las noticias de las ultimas 24 hs 
+CREATE VIEW vista_noticias_ultimas_24hs AS
+SELECT 
+    n.id_noticia,
+    n.titulo,
+    n.contenido,
+    n.time_stamp,
+    c.nombre AS cliente,
+    cat.nombre AS categoria
+FROM noticias n
+LEFT JOIN clientes c ON n.id_cliente = c.id_cliente
+LEFT JOIN categorias cat ON n.id_categoria = cat.id_categoria
+WHERE n.time_stamp >= NOW() - INTERVAL 1 DAY;
+
+#-- Contiene todas las categorias a las que se suscribio el cliente
+CREATE VIEW vista_categorias_por_cliente AS
+SELECT 
+    cc.id_cliente,
+    c.id_categoria,
+    c.nombre AS categoria
+FROM cliente_categoria cc
+JOIN categorias c ON cc.id_categoria = c.id_categoria;
