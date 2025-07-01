@@ -1,7 +1,7 @@
 USE consorcio;
 
 CREATE TABLE clientes (
-    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT PRIMARY KEY,
     password_cliente VARCHAR(255) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL
@@ -89,12 +89,12 @@ JOIN categorias c ON cc.id_categoria = c.id_categoria;
 INSERT INTO clientes(id_cliente, password_cliente, nombre, email) VALUES (41460004, MD5('prueba'), 'Facundo', 'prueba@hola.com');
 INSERT INTO clientes(id_cliente, password_cliente, nombre, email) VALUES (41460005, MD5('prueba'), 'Pepe', 'prueba2@hola.com');
 
-INSERT INTO categoria(id_categoria, nombre) VALUES (1, 'Policial');
-INSERT INTO categoria(id_categoria, nombre) VALUES (2, 'Deportiva');
+INSERT INTO categorias(id_categoria, nombre) VALUES (1, 'Policial');
+INSERT INTO categorias(id_categoria, nombre) VALUES (2, 'Deportiva');
 
-INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (1, 1);
-INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (1, 2);
-INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (2, 2);
+INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460004, 1);
+INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460004, 2);
+INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460005, 2);
 
 INSERT INTO noticias(titulo, contenido, id_cliente, id_categoria) VALUES ('Cientificos reviven al Diego', 'Segun fuentes de tiktok aseguran haber revivido al Diegote pero ahora patea con la derecha', 41460004, 2);
 INSERT INTO noticias(titulo, contenido, id_cliente, id_categoria) VALUES ('Choque sobre ruta 3', 'Por la madrugada del lunes chocaron dos vehiculos. No se registraron heridos.', 41460004, 1);
