@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package lastnews;
+
+option go_package = "/grpc/lastnews";
+
+service LastNews {
+  rpc InformLastNews (ClientRequest) returns (Response) {}
+}
+
+message ClientRequest {
+  string client = 1;
+  string pass = 2;
+}
+
+message Response {
+  string news = 1;
+}
