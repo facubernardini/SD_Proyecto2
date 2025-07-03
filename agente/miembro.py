@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 import grpc
 from concurrent import futures
@@ -11,21 +12,18 @@ from cryptography.fernet import Fernet
 class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def __init__(self, db):
         self.db = db
-        self.fernet = Fernet(os.environ["FERNET_KEY"])
+        self.fernet = Fernet(b'J8vKqAnGsyiQUKmM2hRsaM4TQEL8gtjCKxgMrzG2Fnw=')
         
     def SubscribirCliente(self, request, context):
         cursor = self.db.cursor()
         try:
             # descifrar password
             password_plano = self.fernet.decrypt(request.password_cifrada.encode()).decode()
-            cursor.execute("SELECT id_cliente, password FROM clientes WHERE id_cliente=%s", (request.cliente_id,))
+            # verificar cliente con contraseña
+            cursor.execute("SELECT id_cliente FROM clientes WHERE id_cliente=%s AND password=%s", (request.cliente_id, password_plano))
             cliente = cursor.fetchone()
             if not cliente:
                 return pb2.Respuesta(mensaje=f"El cliente  {request.cliente_id} no existe", exito=False)
-
-            password_bd = cliente[1]
-            if password_plano != password_bd:
-                return pb2.Respuesta(mensaje="ContraseÃ±a incorrecta", exito=False)
 
             cursor.execute("SELECT id_categoria FROM categorias WHERE nombre=%s", (request.area,))
             area = cursor.fetchone()
@@ -54,10 +52,11 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def BorrarSuscripcion(self, request, context):
         cursor = self.db.cursor()
         try:
-            # escifrar password
-            password_plano = self.fernet.decrypt(request.password_cifrada.encode()).decode()
+            # desencriptar contraseña enviada
+            password_plano = self.fernet.decrypt(request.password.encode()).decode()
 
-            cursor.execute("SELECT id_cliente, password FROM clientes WHERE id_cliente=%s", (request.cliente_id,))
+            # verificar cliente con contraseña
+            cursor.execute("SELECT id_cliente FROM clientes WHERE id_cliente=%s AND password=%s", (request.cliente_id, password_plano))
             cliente = cursor.fetchone()
             if not cliente:
                 return pb2.Respuesta(mensaje=f"El cliente {request.cliente_id} no existe", exito=False)
