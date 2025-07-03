@@ -1,0 +1,27 @@
+import grpc
+import agente_pb2
+import agente_pb2_grpc
+import lastnews_pb2
+import lastnews_pb2_grpc
+from concurrent import futures
+
+# Implementación del servicio Servicio_Agente
+class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
+    def ObtenerNoticiasUltimas24hs(self, request, context):
+        print(f"Solicitud recibida de usuario: {request.nombre_usuario}")
+
+        with grpc.insecure_channel('localhost:50051') as channel:    
+            stubLastNews = lastnews_pb2_grpc.LastNewsStub(channel)
+            requestLastNews = lastnews_pb2.ClientRequest(client=request.nombre_usuario,**{"pass": request.password})
+            responseLastNews = stubLastNews.InformLastNews(requestLastNews)
+            return agente_pb2.noticiasInfo(mensaje=responseLastNews.news)
+def servir():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    agente_pb2_grpc.add_Servicio_AgenteServicer_to_server(ServicioAgenteServicer(), server)
+    server.add_insecure_port('[::]:50052')  # Aquí definís el puerto del servidor agente
+    server.start()
+    print("Servidor Servicio_Agente escuchando en el puerto 50052...")
+    server.wait_for_termination()
+
+if __name__ == '__main__':
+    servir()

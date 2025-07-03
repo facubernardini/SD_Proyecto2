@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package agente;
+
+// Mensaje de solicitud
+message noticiasRequest {
+  string nombre_usuario = 1;
+  string password = 2;
+}
+
+// Mensaje de respuesta
+message noticiasInfo {
+  string mensaje = 1;
+}
+
+// Servicio
+service Servicio_Agente {
+  rpc ObtenerNoticiasUltimas24hs (noticiasRequest) returns (noticiasInfo);
+}
+
