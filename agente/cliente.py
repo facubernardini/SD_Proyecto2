@@ -6,24 +6,10 @@ import readchar
 import sys
 
 def run():
-    clave = b'J8vKqAnGsyiQUKmM2hRsaM4TQEL8gtjCKxgMrzG2Fnw='  # cadena base64 en bytes
-    cifrador = Fernet(clave)
     print("Bienvenido al servicio de noticias CONSORCIO DCIC: ")
-    id_cliente = input("Ingresá su numero de documento: ")
-    password = leer_password_con_asteriscos()
-    print(id_cliente)
-    password = cifrador.encrypt(password.encode())
-
-    #ACA DEBERIA HACER EL LOGIN
     with grpc.insecure_channel('localhost:50052') as channel:
         stub = agente_pb2_grpc.Servicio_AgenteStub(channel)
-        request = agente_pb2.LoginDatos(dni=id_cliente, password=password)
-        response = stub.Login(request)
-        login =response.resultado
-        if login == True:
-            print("Login correcto\n\n")
-        else:
-            print("Login incorrecto.\nIntentelo nuevamente\n")
+        id_cliente, password, login = realizar_login(stub)
         while login:               
             # Solicitud
             mostrar_menu()
@@ -39,6 +25,32 @@ def run():
             else:
                 print("Opción inválida, por favor ingresá un número entre 1 y 4.")
         print("Muchas gracias por utilizar el servicio de noticias CONSORCIO DCIC")
+
+def realizar_login(stub):
+    from cryptography.fernet import Fernet
+
+    clave = b'J8vKqAnGsyiQUKmM2hRsaM4TQEL8gtjCKxgMrzG2Fnw='  # clave base64 en bytes
+    cifrador = Fernet(clave)
+
+    for intento in range(1, 4):  # hasta 3 intentos
+        id_cliente = input("Ingresá su número de documento: ")
+        password = leer_password_con_asteriscos()
+        print(id_cliente)
+
+        password_cifrada = cifrador.encrypt(password.encode())
+
+        request = agente_pb2.LoginDatos(dni=id_cliente, password=password_cifrada)
+        response = stub.Login(request)
+        login_exitoso = response.resultado
+
+        if login_exitoso:
+            print("Login correcto\n\n")
+            return id_cliente, password_cifrada, login_exitoso
+        else:
+            print(f"Login incorrecto (intento {intento}/3). Inténtelo nuevamente.\n")
+
+    print("Demasiados intentos fallidos. Abortando.\n")
+    return None, None, False
 
 def obtener_noticias_24hs(stub, id_cliente, password):
     request = agente_pb2.noticiasRequest(nombre_usuario=id_cliente, password=password)

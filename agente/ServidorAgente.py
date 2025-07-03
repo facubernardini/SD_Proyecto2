@@ -16,7 +16,7 @@ class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
             return agente_pb2.noticiasInfo(mensaje=responseLastNews.news)
 
     def Login(self, request,context):
-        print(f"Solicitud de Login recibida de usuario: {request.dni}")  
+        print(f"Solicitud de Login recibida de usuario: {request.dni}{request.password}")  
         return agente_pb2.ResultadoLogin(resultado=True)
 
 def servir():
