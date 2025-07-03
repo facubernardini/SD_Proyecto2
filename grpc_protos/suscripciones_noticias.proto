@@ -12,7 +12,7 @@ service SuscripcionesNoticias {
 message ClienteArea {
   int32 cliente_id = 1;
   string area = 2;
-  string password_cifrada = 3;
+  string password = 3;
 }
 
 message Respuesta {
