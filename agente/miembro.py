@@ -5,23 +5,32 @@ import mysql.connector
 import suscripciones_noticias_pb2 as pb2
 import suscripciones_noticias_pb2_grpc as pb2_grpc
 import time
+import os
+from cryptography.fernet import Fernet
 
 class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def __init__(self, db):
         self.db = db
-
+        self.fernet = Fernet(os.environ["FERNET_KEY"])
+        
     def SubscribirCliente(self, request, context):
         cursor = self.db.cursor()
         try:
-            cursor.execute("SELECT id_cliente FROM clientes WHERE id_cliente=%s", (request.cliente_id,))
+            # descifrar password
+            password_plano = self.fernet.decrypt(request.password_cifrada.encode()).decode()
+            cursor.execute("SELECT id_cliente, password FROM clientes WHERE id_cliente=%s", (request.cliente_id,))
             cliente = cursor.fetchone()
             if not cliente:
-                return pb2.Respuesta(mensaje=f"El cliente {request.cliente_id} no existe", exito=False)
+                return pb2.Respuesta(mensaje=f"El cliente  {request.cliente_id} no existe", exito=False)
+
+            password_bd = cliente[1]
+            if password_plano != password_bd:
+                return pb2.Respuesta(mensaje="ContraseÃ±a incorrecta", exito=False)
 
             cursor.execute("SELECT id_categoria FROM categorias WHERE nombre=%s", (request.area,))
             area = cursor.fetchone()
             if not area:
-                return pb2.Respuesta(mensaje=f"El área {request.area} no existe", exito=False)
+                return pb2.Respuesta(mensaje=f"El Ã¡rea {request.area} no existe", exito=False)
 
             cursor.execute("""
                 SELECT * FROM cliente_categoria
@@ -36,7 +45,7 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
                 VALUES (%s, %s)
             """, (request.cliente_id, area[0]))
             self.db.commit()
-            return pb2.Respuesta(mensaje=f"{request.cliente_id} se suscribió a {request.area}", exito=True)
+            return pb2.Respuesta(mensaje=f"{request.cliente_id} se suscribiÃ³ a {request.area}", exito=True)
 
         except Exception as e:
             print(f"Error en SubscribirCliente: {e}")
@@ -45,15 +54,22 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def BorrarSuscripcion(self, request, context):
         cursor = self.db.cursor()
         try:
-            cursor.execute("SELECT id_cliente FROM clientes WHERE id_cliente=%s", (request.cliente_id,))
+            # escifrar password
+            password_plano = self.fernet.decrypt(request.password_cifrada.encode()).decode()
+
+            cursor.execute("SELECT id_cliente, password FROM clientes WHERE id_cliente=%s", (request.cliente_id,))
             cliente = cursor.fetchone()
             if not cliente:
                 return pb2.Respuesta(mensaje=f"El cliente {request.cliente_id} no existe", exito=False)
 
+            password_bd = cliente[1]
+            if password_plano != password_bd:
+                return pb2.Respuesta(mensaje="ContraseÃ±a incorrecta", exito=False)
+
             cursor.execute("SELECT id_categoria FROM categorias WHERE nombre=%s", (request.area,))
             area = cursor.fetchone()
             if not area:
-                return pb2.Respuesta(mensaje=f"El área {request.area} no existe", exito=False)
+                return pb2.Respuesta(mensaje=f"El Ã¡rea {request.area} no existe", exito=False)
 
             cursor.execute("""
                 SELECT * FROM cliente_categoria
@@ -68,11 +84,11 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
                 WHERE id_cliente=%s AND id_categoria=%s
             """, (request.cliente_id, area[0]))
             self.db.commit()
-            return pb2.Respuesta(mensaje=f"{request.cliente_id} se desuscribió de {request.area}", exito=True)
+            return pb2.Respuesta(mensaje=f"{request.cliente_id} se desuscribiÃ³ de {request.area}", exito=True)
 
         except Exception as e:
             print(f"Error en BorrarSuscripcion: {e}")
-            return pb2.Respuesta(mensaje="Error al borrar suscripción", exito=False)
+            return pb2.Respuesta(mensaje="Error al borrar suscripciÃ³n", exito=False)
 
     def ObtenerClientesPorArea(self, request, context):
         cursor = self.db.cursor()
@@ -129,14 +145,14 @@ def main():
                 password="root",
                 database="consorcio"
             )
-            print("Conexión a la base de datos exitosa.")
+            print("ConexiÃ³n a la base de datos exitosa.")
             break
         except Exception as e:
             print(f"Intento {intento+1}/10: error conectando a MySQL: {e}")
             time.sleep(3)
 
     if not db:
-        print("No se pudo conectar a MySQL después de 10 intentos.")
+        print("No se pudo conectar a MySQL despuÃ©s de 10 intentos.")
         return
     pb2_grpc.add_SuscripcionesNoticiasServicer_to_server(ServicioSuscripciones(db), server)   
     server.add_insecure_port('[::]:50051')
