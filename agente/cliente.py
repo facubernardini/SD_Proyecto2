@@ -15,13 +15,15 @@ def run():
     password = cifrador.encrypt(password.encode())
 
     #ACA DEBERIA HACER EL LOGIN
-    login = True
-    if login == True:
-        print("Login correcto\n\n")
-    else:
-        print("Login incorrecto.\nIntentelo nuevamente\n")
     with grpc.insecure_channel('localhost:50052') as channel:
         stub = agente_pb2_grpc.Servicio_AgenteStub(channel)
+        request = agente_pb2.LoginDatos(dni=id_cliente, password=password)
+        response = stub.Login(request)
+        login =response.resultado
+        if login == True:
+            print("Login correcto\n\n")
+        else:
+            print("Login incorrecto.\nIntentelo nuevamente\n")
         while login:               
             # Solicitud
             mostrar_menu()

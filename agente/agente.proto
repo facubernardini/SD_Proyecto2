@@ -13,8 +13,18 @@ message noticiasInfo {
   string mensaje = 1;
 }
 
+message LoginDatos {
+  string dni = 1;
+  string password = 2;
+}
+
+message ResultadoLogin{
+   bool resultado = 1;
+}
+
 // Servicio
 service Servicio_Agente {
   rpc ObtenerNoticiasUltimas24hs (noticiasRequest) returns (noticiasInfo);
+  rpc Login (LoginDatos) returns (ResultadoLogin);
 }
 

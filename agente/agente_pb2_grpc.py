@@ -40,6 +40,11 @@ class Servicio_AgenteStub(object):
                 request_serializer=agente__pb2.noticiasRequest.SerializeToString,
                 response_deserializer=agente__pb2.noticiasInfo.FromString,
                 _registered_method=True)
+        self.Login = channel.unary_unary(
+                '/agente.Servicio_Agente/Login',
+                request_serializer=agente__pb2.LoginDatos.SerializeToString,
+                response_deserializer=agente__pb2.ResultadoLogin.FromString,
+                _registered_method=True)
 
 
 class Servicio_AgenteServicer(object):
@@ -52,6 +57,12 @@ class Servicio_AgenteServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Login(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_Servicio_AgenteServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -59,6 +70,11 @@ def add_Servicio_AgenteServicer_to_server(servicer, server):
                     servicer.ObtenerNoticiasUltimas24hs,
                     request_deserializer=agente__pb2.noticiasRequest.FromString,
                     response_serializer=agente__pb2.noticiasInfo.SerializeToString,
+            ),
+            'Login': grpc.unary_unary_rpc_method_handler(
+                    servicer.Login,
+                    request_deserializer=agente__pb2.LoginDatos.FromString,
+                    response_serializer=agente__pb2.ResultadoLogin.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -89,6 +105,33 @@ class Servicio_Agente(object):
             '/agente.Servicio_Agente/ObtenerNoticiasUltimas24hs',
             agente__pb2.noticiasRequest.SerializeToString,
             agente__pb2.noticiasInfo.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Login(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/agente.Servicio_Agente/Login',
+            agente__pb2.LoginDatos.SerializeToString,
+            agente__pb2.ResultadoLogin.FromString,
             options,
             channel_credentials,
             insecure,
