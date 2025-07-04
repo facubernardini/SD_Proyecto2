@@ -6,7 +6,7 @@ service SuscripcionesNoticias {
   rpc SubscribirCliente(ClienteArea) returns (Respuesta);
   rpc BorrarSuscripcion(ClienteArea) returns (Respuesta);
   rpc ObtenerClientesPorArea(Area) returns (ListaClientes);
-  rpc ObtenerNoticiasDeArea(Area) returns (ListaNoticias);
+  rpc ObtenerNoticiasDeArea(Area) returns (ListaNoticiasYClientes);
 }
 
 message ClienteArea {
@@ -36,4 +36,9 @@ message Noticia {
 
 message ListaNoticias {
   repeated Noticia noticias = 1;
+}
+
+message ListaNoticiasYClientes {
+  repeated Noticia noticias = 1;
+  repeated string clientes = 2;
 }
