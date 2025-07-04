@@ -9,7 +9,7 @@ service LastNews {
 }
 
 message ClientRequest {
-  int client = 1;
+  int32 client = 1;
   string pass = 2;
 }
 
