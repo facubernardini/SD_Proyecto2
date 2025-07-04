@@ -14,7 +14,7 @@ message noticiasInfo {
 }
 
 message LoginDatos {
-  string dni = 1;
+  int32 dni = 1;
   string password = 2;
 }
 
@@ -22,9 +22,21 @@ message ResultadoLogin{
    bool resultado = 1;
 }
 
+message DatosSuscribirNuevaCategoria{
+  int32 cliente_id = 1;
+  string area = 2;
+  string password = 3;
+}
+
+message ResultadoSuscribirNuevaCategoria{
+  string mensaje = 1 ;
+  bool exito =2 ;
+}
+
 // Servicio
 service Servicio_Agente {
   rpc ObtenerNoticiasUltimas24hs (noticiasRequest) returns (noticiasInfo);
   rpc Login (LoginDatos) returns (ResultadoLogin);
+  rpc SuscribirNuevaCategoria (DatosSuscribirNuevaCategoria) returns (ResultadoSuscribirNuevaCategoria);
 }
 

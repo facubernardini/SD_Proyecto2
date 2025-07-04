@@ -1,4 +1,3 @@
-from cryptography.fernet import Fernet
 import grpc
 import agente_pb2
 import agente_pb2_grpc
@@ -16,6 +15,7 @@ def run():
             opcion = input("Elegí una opción (1-4): ").strip()
             opciones = {
                 "1": lambda: obtener_noticias_24hs(stub, id_cliente, password),
+                "2": lambda: suscribirse_nueva_categoria(stub, id_cliente, password),
             }
             if opcion == "4":
                 print("Saliendo...")
@@ -26,6 +26,13 @@ def run():
                 print("Opción inválida, por favor ingresá un número entre 1 y 4.")
         print("Muchas gracias por utilizar el servicio de noticias CONSORCIO DCIC")
 
+def suscribirse_nueva_categoria(stub, id_cliente, password):
+    area = input("Ingresá el area a la cual desea suscribirse: ").split()[0]
+    request = agente_pb2.DatosSuscribirNuevaCategoria(cliente_id=id_cliente, area=area, password=password)
+    response = stub.SuscribirNuevaCategoria(request)
+    print("Respuesta del servidor:\n", response.mensaje)
+    print("Resultado de la operacion: {response.exito} ")
+
 def realizar_login(stub):
     from cryptography.fernet import Fernet
 
@@ -33,7 +40,13 @@ def realizar_login(stub):
     cifrador = Fernet(clave)
 
     for intento in range(1, 4):  # hasta 3 intentos
-        id_cliente = input("Ingresá su número de documento: ")
+        while True:
+            entrada = input("Ingresá su número de documento: ").strip()
+            if entrada.isdigit():
+                id_cliente = int(entrada)  # <-- ahora es un entero real
+                break
+            else:
+                print("Ingresá un número de documento válido.")
         password = leer_password_con_asteriscos()
         print(id_cliente)
 
@@ -60,7 +73,7 @@ def obtener_noticias_24hs(stub, id_cliente, password):
 def mostrar_menu():
     print("\n===== ¿Que servicio desea utilizar?=====")
     print("1. Obtener noticias últimas 24 hs")
-    print("2. Consultar estado del agente")
+    print("2. Suscribirse a una nueva categoria")
     print("3. Enviar reporte")
     print("4. Salir")
     print("===============================")

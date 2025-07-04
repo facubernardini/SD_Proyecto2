@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x61gente.proto\x12\x06\x61gente\";\n\x0fnoticiasRequest\x12\x16\n\x0enombre_usuario\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1f\n\x0cnoticiasInfo\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\"+\n\nLoginDatos\x12\x0b\n\x03\x64ni\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"#\n\x0eResultadoLogin\x12\x11\n\tresultado\x18\x01 \x01(\x08\x32\x93\x01\n\x0fServicio_Agente\x12K\n\x1aObtenerNoticiasUltimas24hs\x12\x17.agente.noticiasRequest\x1a\x14.agente.noticiasInfo\x12\x33\n\x05Login\x12\x12.agente.LoginDatos\x1a\x16.agente.ResultadoLoginb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x61gente.proto\x12\x06\x61gente\";\n\x0fnoticiasRequest\x12\x16\n\x0enombre_usuario\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1f\n\x0cnoticiasInfo\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\"+\n\nLoginDatos\x12\x0b\n\x03\x64ni\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\"#\n\x0eResultadoLogin\x12\x11\n\tresultado\x18\x01 \x01(\x08\"R\n\x1c\x44\x61tosSuscribirNuevaCategoria\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x0c\n\x04\x61rea\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"B\n ResultadoSuscribirNuevaCategoria\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\x12\r\n\x05\x65xito\x18\x02 \x01(\x08\x32\xfe\x01\n\x0fServicio_Agente\x12K\n\x1aObtenerNoticiasUltimas24hs\x12\x17.agente.noticiasRequest\x1a\x14.agente.noticiasInfo\x12\x33\n\x05Login\x12\x12.agente.LoginDatos\x1a\x16.agente.ResultadoLogin\x12i\n\x17SuscribirNuevaCategoria\x12$.agente.DatosSuscribirNuevaCategoria\x1a(.agente.ResultadoSuscribirNuevaCategoriab\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -39,6 +39,10 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_LOGINDATOS']._serialized_end=161
   _globals['_RESULTADOLOGIN']._serialized_start=163
   _globals['_RESULTADOLOGIN']._serialized_end=198
-  _globals['_SERVICIO_AGENTE']._serialized_start=201
-  _globals['_SERVICIO_AGENTE']._serialized_end=348
+  _globals['_DATOSSUSCRIBIRNUEVACATEGORIA']._serialized_start=200
+  _globals['_DATOSSUSCRIBIRNUEVACATEGORIA']._serialized_end=282
+  _globals['_RESULTADOSUSCRIBIRNUEVACATEGORIA']._serialized_start=284
+  _globals['_RESULTADOSUSCRIBIRNUEVACATEGORIA']._serialized_end=350
+  _globals['_SERVICIO_AGENTE']._serialized_start=353
+  _globals['_SERVICIO_AGENTE']._serialized_end=607
 # @@protoc_insertion_point(module_scope)
