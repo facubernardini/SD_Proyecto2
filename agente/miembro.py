@@ -93,14 +93,14 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
         cursor = self.db.cursor()
         try:
             cursor.execute("""
-                SELECT c.nombre
+                SELECT c.id_cliente
                 FROM clientes c
                 JOIN cliente_categoria cc ON c.id_cliente = cc.id_cliente
                 JOIN categorias cat ON cc.id_categoria = cat.id_categoria
                 WHERE cat.nombre=%s
             """, (request.nombre,))
-            clientes = [row[0] for row in cursor.fetchall()]
-            return pb2.ListaClientes(clientes=clientes)
+            ids = [str(row[0]) for row in cursor.fetchall()]
+            return pb2.ListaClientes(clientes=ids)
         except Exception as e:
             print(f"Error en ObtenerClientesPorArea: {e}")
             return pb2.ListaClientes(clientes=[])
@@ -108,17 +108,21 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def ObtenerNoticiasDeArea(self, request, context):
         cursor = self.db.cursor()
         try:
+            # obtener id de la categoría
             cursor.execute("SELECT id_categoria FROM categorias WHERE nombre=%s", (request.nombre,))
             area = cursor.fetchone()
             if not area:
-                return pb2.ListaNoticias(noticias=[])
+                return pb2.ListaNoticiasYClientes(noticias=[], clientes=[])
 
+            id_categoria = area[0]
+
+            # obtener noticias
             cursor.execute("""
                 SELECT titulo, contenido, time_stamp
                 FROM noticias
                 WHERE id_categoria=%s
                 ORDER BY time_stamp DESC
-            """, (area[0],))
+            """, (id_categoria,))
             noticias = [
                 pb2.Noticia(
                     titulo=row[0],
@@ -126,11 +130,20 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
                     fecha=str(row[2])
                 ) for row in cursor.fetchall()
             ]
-            return pb2.ListaNoticias(noticias=noticias)
+
+            # obtener clientes de esa área
+            cursor.execute("""
+                SELECT id_cliente
+                FROM cliente_categoria
+                WHERE id_categoria=%s
+            """, (id_categoria,))
+            clientes = [str(row[0]) for row in cursor.fetchall()]
+
+            return pb2.ListaNoticiasYClientes(noticias=noticias, clientes=clientes)
 
         except Exception as e:
             print(f"Error en ObtenerNoticiasDeArea: {e}")
-            return pb2.ListaNoticias(noticias=[])
+            return pb2.ListaNoticiasYClientes(noticias=[], clientes=[])
 
 
 def main():
