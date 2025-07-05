@@ -18,7 +18,7 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
         cursor = self.db.cursor()
         try:
             # descifrar password
-            password_plano = self.fernet.decrypt(request.password_cifrada.encode()).decode()
+            password_plano = self.fernet.decrypt(request.password.encode()).decode()
             # verificar cliente con contraseña
             cursor.execute("SELECT id_cliente FROM clientes WHERE id_cliente=%s AND password=%s", (request.cliente_id, password_plano))
             cliente = cursor.fetchone()
@@ -108,21 +108,27 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def ObtenerNoticiasDeArea(self, request, context):
         cursor = self.db.cursor()
         try:
-            # obtener id de la categoría
-            cursor.execute("SELECT id_categoria FROM categorias WHERE nombre=%s", (request.nombre,))
+            # desencriptar contraseña enviada
+            password_plano = self.fernet.decrypt(request.password.encode()).decode()
+
+            # verificar cliente con contraseña
+            cursor.execute("SELECT id_cliente FROM clientes WHERE id_cliente=%s AND password=%s", (request.cliente_id, password_plano))
+            cliente = cursor.fetchone()
+            if not cliente:
+                return pb2.ListaNoticias(noticias=[])
+            
+            cursor.execute("SELECT id_categoria FROM categorias WHERE nombre=%s", (request.area,))
             area = cursor.fetchone()
             if not area:
-                return pb2.ListaNoticiasYClientes(noticias=[], clientes=[])
+                return pb2.ListaNoticias(noticias=[])
 
-            id_categoria = area[0]
-
-            # obtener noticias
             cursor.execute("""
                 SELECT titulo, contenido, time_stamp
                 FROM noticias
                 WHERE id_categoria=%s
                 ORDER BY time_stamp DESC
-            """, (id_categoria,))
+                LIMIT 3
+            """, (area[0],))
             noticias = [
                 pb2.Noticia(
                     titulo=row[0],
@@ -130,20 +136,12 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
                     fecha=str(row[2])
                 ) for row in cursor.fetchall()
             ]
+            return pb2.ListaNoticias(noticias=noticias)
 
-            # obtener clientes de esa área
-            cursor.execute("""
-                SELECT id_cliente
-                FROM cliente_categoria
-                WHERE id_categoria=%s
-            """, (id_categoria,))
-            clientes = [str(row[0]) for row in cursor.fetchall()]
-
-            return pb2.ListaNoticiasYClientes(noticias=noticias, clientes=clientes)
 
         except Exception as e:
             print(f"Error en ObtenerNoticiasDeArea: {e}")
-            return pb2.ListaNoticiasYClientes(noticias=[], clientes=[])
+            return pb2.ListaNoticias(noticias=[])
 
 
 def main():
