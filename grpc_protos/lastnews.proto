@@ -10,7 +10,7 @@ service LastNews {
 
 message ClientRequest {
   int32 client = 1;
-  string pass = 2;
+  string passw = 2;
 }
 
 message Response {
