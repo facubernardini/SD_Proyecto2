@@ -5,11 +5,12 @@ from typing import ClassVar as _ClassVar, Optional as _Optional
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class ClientRequest(_message.Message):
-    __slots__ = ("client",)
+    __slots__ = ("client", "passw")
     CLIENT_FIELD_NUMBER: _ClassVar[int]
-    PASS_FIELD_NUMBER: _ClassVar[int]
+    PASSW_FIELD_NUMBER: _ClassVar[int]
     client: int
-    def __init__(self, client: _Optional[int] = ..., **kwargs) -> None: ...
+    passw: str
+    def __init__(self, client: _Optional[int] = ..., passw: _Optional[str] = ...) -> None: ...
 
 class Response(_message.Message):
     __slots__ = ("news",)
