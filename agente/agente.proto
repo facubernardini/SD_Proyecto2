@@ -4,7 +4,7 @@ package agente;
 
 // Mensaje de solicitud
 message noticiasRequest {
-  string nombre_usuario = 1;
+  int32 nombre_usuario = 1;
   string password = 2;
 }
 

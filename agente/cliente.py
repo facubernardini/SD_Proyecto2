@@ -17,8 +17,9 @@ def run():
                 "1": lambda: obtener_noticias_24hs(stub, id_cliente, password),
                 "2": lambda: suscribirse_nueva_categoria(stub, id_cliente, password),
                 "3": lambda: borrarse_de_una_suscripcion(stub, id_cliente, password),
+                "4": lambda: obtener_ultimas_noticias_categoria( stub, id_cliente, password),
             }
-            if opcion == "4":
+            if opcion == "5":
                 print("Saliendo...")
                 login = False
             elif opcion in opciones:
@@ -27,19 +28,25 @@ def run():
                 print("Opción inválida, por favor ingresá un número entre 1 y 4.")
         print("Muchas gracias por utilizar el servicio de noticias CONSORCIO DCIC")
 
+def obtener_ultimas_noticias_categoria(stub, id_cliente, password):
+    area = input("Ingrese el nombre de la categoria de la cual desea obtener las ultimas noticias: ").split()[0]
+    request = agente_pb2.DatosObtenerUltimasNoticias(cliente_id=id_cliente ,password=password,area=area)
+    response = stub.ObtenerUltimasNoticias(request)
+    print(f"Las ultimas noticias del area {area} son: \n {response.mensaje}")
+
 def borrarse_de_una_suscripcion(stub, id_cliente, password):
     area = input("Ingrese el nombre de la categoria de la cual desea anular su suscripcion: ").split()[0]
     request = agente_pb2.DatosSuscribirNuevaCategoria(cliente_id=id_cliente, area=area, password=password)
-    response = stub.SuscribirNuevaCategoria(request)
+    response = stub.BorrarSuscripcionCategoria(request)
     print("Respuesta del servidor:\n", response.mensaje)
-    print("Resultado de la operacion: {response.exito} ")
+    print(f"Resultado de la operacion: {response.exito} ")
 
 def suscribirse_nueva_categoria(stub, id_cliente, password):
     area = input("Ingresá el area a la cual desea suscribirse: ").split()[0]
     request = agente_pb2.DatosSuscribirNuevaCategoria(cliente_id=id_cliente, area=area, password=password)
     response = stub.SuscribirNuevaCategoria(request)
     print("Respuesta del servidor:\n", response.mensaje)
-    print("Resultado de la operacion: {response.exito} ")
+    print(f"Resultado de la operacion: {response.exito} ")
 
 def realizar_login(stub):
     from cryptography.fernet import Fernet
@@ -51,7 +58,7 @@ def realizar_login(stub):
         while True:
             entrada = input("Ingresá su número de documento: ").strip()
             if entrada.isdigit():
-                id_cliente = int(entrada)  # <-- ahora es un entero real
+                id_cliente = int(entrada)  #Lo transoformo a entero
                 break
             else:
                 print("Ingresá un número de documento válido.")
@@ -76,14 +83,15 @@ def realizar_login(stub):
 def obtener_noticias_24hs(stub, id_cliente, password):
     request = agente_pb2.noticiasRequest(nombre_usuario=id_cliente, password=password)
     response = stub.ObtenerNoticiasUltimas24hs(request)
-    print("Respuesta del servidor:\n", response.mensaje)
+    print(f"Respuesta del servidor:\n {response.mensaje}")
 
 def mostrar_menu():
     print("\n===== ¿Que servicio desea utilizar?=====")
     print("1. Obtener noticias últimas 24 hs")
     print("2. Suscribirse a una nueva categoria")
     print("3. Anular una suscripcion")
-    print("4. Salir")
+    print("4. Obtener ultimas noticias de una categoria")
+    print("5. Salir")
     print("===============================")
 
 def leer_password_con_asteriscos():

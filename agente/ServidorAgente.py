@@ -9,12 +9,13 @@ from concurrent import futures
 class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
     def ObtenerNoticiasUltimas24hs(self, request, context):
         print(f"Solicitud de noticias delas ultimas 24hs recibida de usuario: {request.nombre_usuario}")
-        with grpc.insecure_channel('localhost:50051') as channel:    
-            stubLastNews = lastnews_pb2_grpc.LastNewsStub(channel)
-            requestLastNews = lastnews_pb2.ClientRequest(client=request.nombre_usuario,**{"pass": request.password})
-            responseLastNews = stubLastNews.InformLastNews(requestLastNews)
-            return agente_pb2.noticiasInfo(mensaje=responseLastNews.news)
-
+        #with grpc.insecure_channel('localhost:50051') as channel:    
+        #    stubLastNews = lastnews_pb2_grpc.LastNewsStub(channel)
+        #    requestLastNews = lastnews_pb2.ClientRequest(client=request.nombre_usuario,**{"pass": request.password})
+        #    responseLastNews = stubLastNews.InformLastNews(requestLastNews)
+        #    return agente_pb2.noticiasInfo(mensaje=responseLastNews.news)
+        return agente_pb2.noticiasInfo(mensaje="Cristina presa!")
+    
     def Login(self, request,context):
         print(f"Solicitud de Login recibida de usuario: {request.dni}")
         #Aca debo conectarme al Login del miemro y devolver su respuesta
@@ -25,7 +26,15 @@ class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
         #Aca debo conectarme al Suscrbir nueva categoria del miembro
         return agente_pb2.ResultadoSuscribirNuevaCategoria(mensaje="Su suscripcion ha sido aceptada", exito=True)
     
-        
+    def BorrarSuscripcionCategoria(self, request, context):
+        print(f"Se solicito la anulacion a una suscripcion a la categoria {request.area} del usuario {request.cliente_id} ")
+        #Aca debo conectarme a Borrar suscripcion del miembro
+        return agente_pb2.ResultadoSuscribirNuevaCategoria(mensaje="se borro con exito", exito =True)
+    
+    def ObtenerUltimasNoticias(self, request, context):
+        print(f"Se solicitaron las ultimas noticias de la categoria {request.area} por parte del usuario {request.cliente_id}")
+        #Aca debo conectarme a obtener ultimas noticias del miembro
+        return agente_pb2.ResultadoSuscribirNuevaCategoria(mensaje="Las ultimas noticias son:\nCristina Presa\nMilei clono a su hermana\n")
 
 def servir():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
