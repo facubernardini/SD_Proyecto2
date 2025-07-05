@@ -16,6 +16,7 @@ def run():
             opciones = {
                 "1": lambda: obtener_noticias_24hs(stub, id_cliente, password),
                 "2": lambda: suscribirse_nueva_categoria(stub, id_cliente, password),
+                "3": lambda: borrarse_de_una_suscripcion(stub, id_cliente, password),
             }
             if opcion == "4":
                 print("Saliendo...")
@@ -25,6 +26,13 @@ def run():
             else:
                 print("Opción inválida, por favor ingresá un número entre 1 y 4.")
         print("Muchas gracias por utilizar el servicio de noticias CONSORCIO DCIC")
+
+def borrarse_de_una_suscripcion(stub, id_cliente, password):
+    area = input("Ingrese el nombre de la categoria de la cual desea anular su suscripcion: ").split()[0]
+    request = agente_pb2.DatosSuscribirNuevaCategoria(cliente_id=id_cliente, area=area, password=password)
+    response = stub.SuscribirNuevaCategoria(request)
+    print("Respuesta del servidor:\n", response.mensaje)
+    print("Resultado de la operacion: {response.exito} ")
 
 def suscribirse_nueva_categoria(stub, id_cliente, password):
     area = input("Ingresá el area a la cual desea suscribirse: ").split()[0]
@@ -74,7 +82,7 @@ def mostrar_menu():
     print("\n===== ¿Que servicio desea utilizar?=====")
     print("1. Obtener noticias últimas 24 hs")
     print("2. Suscribirse a una nueva categoria")
-    print("3. Enviar reporte")
+    print("3. Anular una suscripcion")
     print("4. Salir")
     print("===============================")
 

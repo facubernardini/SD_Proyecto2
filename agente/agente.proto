@@ -33,10 +33,18 @@ message ResultadoSuscribirNuevaCategoria{
   bool exito =2 ;
 }
 
+message DatosObtenerUltimasNoticias{
+  int32 cliente_id = 1;
+  string password = 2;
+  string area = 3;
+}
+
 // Servicio
 service Servicio_Agente {
   rpc ObtenerNoticiasUltimas24hs (noticiasRequest) returns (noticiasInfo);
   rpc Login (LoginDatos) returns (ResultadoLogin);
   rpc SuscribirNuevaCategoria (DatosSuscribirNuevaCategoria) returns (ResultadoSuscribirNuevaCategoria);
+  rpc BorrarSuscripcionCategoria (DatosSuscribirNuevaCategoria) returns (ResultadoSuscribirNuevaCategoria);
+  rpc ObtenerUltimasNoticias (DatosObtenerUltimasNoticias) returns (noticiasInfo);
 }
 
