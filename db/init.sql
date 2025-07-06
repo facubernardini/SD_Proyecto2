@@ -183,17 +183,24 @@ CREATE PROCEDURE crear_noticia (
 )
 BEGIN
   DECLARE v_id_noticia INT;
+  DECLARE v_existe INT;
 
-  INSERT INTO noticias (titulo, contenido)
-  VALUES (p_titulo, p_contenido);
+  SELECT COUNT(*) INTO v_existe
+  FROM cliente_categoria
+  WHERE id_cliente = p_id_cliente AND id_categoria = p_id_categoria;
 
-  SET v_id_noticia = LAST_INSERT_ID();
+  IF v_existe > 0 THEN
+    INSERT INTO noticias (titulo, contenido)
+    VALUES (p_titulo, p_contenido);
 
-  INSERT INTO cliente_noticia (id_cliente, id_noticia)
-  VALUES (p_id_cliente, v_id_noticia);
+    SET v_id_noticia = LAST_INSERT_ID();
 
-  INSERT INTO noticia_categoria (id_noticia, id_categoria)
-  VALUES (v_id_noticia, p_id_categoria);
+    INSERT INTO cliente_noticia (id_cliente, id_noticia)
+    VALUES (p_id_cliente, v_id_noticia);
+
+    INSERT INTO noticia_categoria (id_noticia, id_categoria)
+    VALUES (v_id_noticia, p_id_categoria);
+  END IF;
 END;//
 
 CREATE PROCEDURE eliminar_noticia_cliente (
@@ -226,6 +233,30 @@ CREATE PROCEDURE eliminar_categoria (
 BEGIN
   DELETE FROM categorias
   WHERE id_categoria = p_id_categoria;
+END;//
+
+CREATE PROCEDURE suscribir_cliente_categoria (
+  IN p_id_cliente INT,
+  IN p_id_categoria INT
+)
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM cliente_categoria 
+    WHERE id_cliente = p_id_cliente AND id_categoria = p_id_categoria
+  ) THEN
+    INSERT INTO cliente_categoria (id_cliente, id_categoria)
+    VALUES (p_id_cliente, p_id_categoria);
+  END IF;
+END;//
+
+CREATE PROCEDURE desuscribir_cliente_categoria (
+  IN p_id_cliente INT,
+  IN p_id_categoria INT
+)
+BEGIN
+  DELETE FROM cliente_categoria
+  WHERE id_cliente = p_id_cliente
+    AND id_categoria = p_id_categoria;
 END;//
 
 DELIMITER ;
