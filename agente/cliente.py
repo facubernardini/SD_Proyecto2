@@ -6,7 +6,7 @@ import sys
 
 def run():
     print("Bienvenido al servicio de noticias CONSORCIO DCIC: ")
-    with grpc.insecure_channel('localhost:50052') as channel:
+    with grpc.insecure_channel('192.168.239.132:50052') as channel:
         stub = agente_pb2_grpc.Servicio_AgenteStub(channel)
         id_cliente, password, login = realizar_login(stub)
         while login:               
