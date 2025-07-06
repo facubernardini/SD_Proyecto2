@@ -14,12 +14,12 @@ def ejecutar_cliente():
         cifrador = Fernet(clave)
         password = "SoyPassword"
         password = cifrador.encrypt(password.encode())
-        peticion = lastnews_pb2.ClientRequest(client=123456,passw=password)
+        peticion = lastnews_pb2.ClientRequest(client=41460004,passw=password)
 
         # Realizar la llamada RPC
         try:
             respuesta = stub.InformLastNews(peticion)
-            print(f"Respuesta del servidor: {respuesta.news}")
+            print(f"Respuesta del servidor: \n{respuesta.news}")
         except grpc.RpcError as e:
             print(f"Error en la llamada RPC: {e.code()}: {e.details()}")
 
