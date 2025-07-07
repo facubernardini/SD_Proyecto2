@@ -38,7 +38,7 @@ class LastNewsServicer(lastnews_pb2_grpc.LastNewsServicer):
 
         try:
             cnx = connection.MySQLConnection(
-                host="localhost",
+                host="mysql",
                 user="root",
                 password="admin",
                 database="consorcio"
@@ -103,7 +103,7 @@ def show_categorias(cnx):
 def admin_categorias():
     try:
         cnx = connection.MySQLConnection(
-            host="localhost",
+            host="mysql",
             user="root",
             password="admin",
             database="consorcio"
