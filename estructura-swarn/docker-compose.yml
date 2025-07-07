@@ -30,7 +30,17 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
-
+  lastnews:
+    image: lastnews:latest
+    ports:
+      - target: 50053
+        published: 50053
+        protocol: tcp
+        mode: ingress
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
 volumes:
   mysql_volume:
