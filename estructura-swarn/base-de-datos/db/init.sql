@@ -145,6 +145,42 @@ LEFT JOIN cliente_noticia cn ON n.id_noticia = cn.id_noticia
 LEFT JOIN clientes autor ON cn.id_cliente = autor.id_cliente;
 
 
+#--- Muestra la noticia mas reciente
+CREATE VIEW vista_obtener_noticia_reciente AS
+    SELECT titulo, contenido, time_stamp as hora
+    FROM noticias
+    ORDER BY time_stamp DESC
+    LIMIT 1;
+
+DELIMITER //
+
+CREATE PROCEDURE eliminar_noticia_creada_recientemente (IN id_cliente_input INT, OUT eliminado BOOL)
+BEGIN
+ DECLARE noticia_borra INT;
+
+    SELECT n.id_noticia INTO noticia_borra
+    FROM noticias n
+    JOIN cliente_noticia cn ON n.id_noticia = cn.id_noticia
+    WHERE cn.id_cliente = id_cliente_input
+    ORDER BY n.time_stamp DESC
+    LIMIT 1;
+
+    IF noticia_borra IS NULL THEN
+	SET eliminado = FALSE;
+    ELSE
+    	DELETE FROM cliente_noticia
+    	WHERE id_noticia = noticia_borra AND id_cliente = id_cliente_input;
+
+	DELETE FROM noticias
+	WHERE id_noticia = noticia_borra;
+
+	SET eliminado = TRUE;
+    END IF;
+
+END;//
+
+
+
 #------------------ DATOS DE PRUEBA ------------------#
 
 INSERT INTO clientes(id_cliente, password_cliente, nombre, email) VALUES (41460004, MD5('prueba'), 'Facundo', 'prueba@hola.com');
