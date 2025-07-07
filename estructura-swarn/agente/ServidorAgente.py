@@ -3,6 +3,10 @@ import agente_pb2
 import agente_pb2_grpc
 import lastnews_pb2
 import lastnews_pb2_grpc
+
+import suscripciones_pb2
+import suscripciones_pb2_grpc
+
 from concurrent import futures
 
 # Implementación del servicio Servicio_Agente
@@ -23,7 +27,12 @@ class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
     def SuscribirNuevaCategoria(self, request, context):
         print(f"Solicitud de suscripcion a nueva categoria del usuario {request.cliente_id} al area {request.area}")
         #Aca debo conectarme al Suscrbir nueva categoria del miembro
-        return agente_pb2.ResultadoSuscribirNuevaCategoria(mensaje="Su suscripcion ha sido aceptada", exito=True)
+        with grpc.insecure_channel('suscripciones:50054') as channel:    
+            stubSuscripciones = suscripciones_pb2_grpc.SuscripcionesNoticiasStub(channel)
+            requestSuscribirCliente =suscripciones_pb2.ClienteArea(cliente_id=request.nombre_usuario,area=request.area,password=request.password)
+            responseSuscribirNuevaCategoria = stubSuscripciones.SubscribirCliente(requestSuscribirCliente)
+            return agente_pb2.noticiasInfo(mensaje=responseSuscribirNuevaCategoria.mensaje)
+
     
     def BorrarSuscripcionCategoria(self, request, context):
         print(f"Se solicito la anulacion a una suscripcion a la categoria {request.area} del usuario {request.cliente_id} ")
