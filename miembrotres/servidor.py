@@ -23,18 +23,18 @@ def manejar_ctrl_c(signal, frame):
 
 signal.signal(signal.SIGINT, manejar_ctrl_c)
 
-# CLAVE = b'J8vKqAnGsyiQUKmM2hRsaM4TQEL8gtjCKxgMrzG2Fnw='
+CLAVE = b'J8vKqAnGsyiQUKmM2hRsaM4TQEL8gtjCKxgMrzG2Fnw='
 
 class LastNewsServicer(lastnews_pb2_grpc.LastNewsServicer):
     def InformLastNews(self, request, context):
 
-        # cifrador = Fernet(CLAVE)
+        cifrador = Fernet(CLAVE)
 
-        # password = cifrador.decrypt(request.passw.encode()) #asi se descencripta
-        # print("request:",request)
-        # print("password:",password)
-        # passwString = password.decode("utf-8")
-        # print("passwString:",passwString)
+        password = cifrador.decrypt(request.passw.encode()) #asi se descencripta
+        print("request:",request)
+        print("password:",password)
+        passwString = password.decode("utf-8")
+        print("passwString:",passwString)
 
         try:
             cnx = connection.MySQLConnection(
@@ -53,7 +53,7 @@ class LastNewsServicer(lastnews_pb2_grpc.LastNewsServicer):
                 print(err)
         
         # print("Solicitud de ultimas notificas realizada por usuario con id {}\n".format(request.client))
-        mensaje_queue.put("Solicitud de ultimas notificas realizada por usuario con id {}".format(request.client))
+        mensaje_queue.put("Solicitud de ultimas noticias realizada por usuario con id {}".format(request.client))
         noticias = ""
         nombreUsuario = ""
         if cnx and cnx.is_connected():
@@ -61,20 +61,23 @@ class LastNewsServicer(lastnews_pb2_grpc.LastNewsServicer):
             with cnx.cursor() as cursor:
 
                 # result = cursor.execute("SELECT nombre_categoria FROM vista_categorias_disponibles;")
-                cursor.execute("SELECT nombre FROM clientes WHERE id_cliente = '{}';".format(request.client))
+                cursor.execute("SELECT nombre FROM clientes WHERE id_cliente = '{}' AND password_cliente = MD5('{}');".format(request.client, passwString))
                 for (nombre) in cursor:
-                    nombreUsuario = nombreUsuario + "{}".format(nombre)
+                    nombreUsuario = nombre[0]
                 
+                if nombreUsuario=="":
+                    mensaje_queue.put("El usuario con id {} es inválido.".format(request.client))
+                    return lastnews_pb2.Response(news="Usuario invalido")
+                else:
+                    mensaje_queue.put("El usuario con id {} se llama {}.".format(request.client,nombreUsuario))
                 # print("El usuario con id {} se llama {}\n".format(request.client, nombreUsuario))
-                mensaje_queue.put("El usuario con id {} se llama {}".format(request.client, nombreUsuario))
 
-                # cursor.execute("SELECT titulo, contenido FROM vista_noticias_ultimas_24hs WHERE cliente = '{}';".format(nombreUsuario))
+                cursor.execute("SELECT titulo, contenido FROM noticias as n JOIN noticia_categoria as nc JOIN (SELECT id_categoria FROM clientes as c JOIN cliente_categoria as b WHERE c.id_cliente = {} AND b.id_cliente = {} AND c.id_cliente = b.id_cliente ) as c WHERE n.id_noticia = nc.id_noticia AND nc.id_categoria = c.id_categoria;".format(request.client,request.client))
 
-                # for (titulo, contenido) in cursor:
-                #     noticias = noticias + "NOTICIA:{} {}\n".format(titulo, contenido)
+                for (titulo, contenido) in cursor:
+                    noticias = noticias + "NOTICIA:{}: {}\n".format(titulo, contenido)
 
         cnx.close()
-        # print("Solicitud de {} Ejecutada correctamente\n".format(nombreUsuario))
         mensaje_queue.put("Solicitud de {} Ejecutada correctamente".format(nombreUsuario))
 
         return lastnews_pb2.Response(news=noticias)
@@ -166,7 +169,6 @@ def service_dos():
             return
         
         logger_sem.acquire()
-        print("selecciono la opcion:",opcion)
         if(opcion=="1"):
             admin_categorias()
         logger_sem.release()
@@ -183,9 +185,8 @@ def iniciar_servidor():
     lastnews_pb2_grpc.add_LastNewsServicer_to_server(
         LastNewsServicer(), servidor
     )
-    # print("Servidor gRPC escuchando en el puerto 50051...")
-    mensaje_queue.put("Servidor gRPC escuchando en el puerto 50051...")
-    servidor.add_insecure_port('[::]:50051')
+    mensaje_queue.put("Servidor gRPC escuchando en el puerto 50053...")
+    servidor.add_insecure_port('[::]:50053')
     servidor.start()
     servidor.wait_for_termination()
 

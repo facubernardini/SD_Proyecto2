@@ -12,9 +12,17 @@ def ejecutar_cliente():
         # Crear una petición
         clave = b'J8vKqAnGsyiQUKmM2hRsaM4TQEL8gtjCKxgMrzG2Fnw='
         cifrador = Fernet(clave)
-        password = "SoyPassword"
+        while True:
+            entrada = input("Ingresá su número de documento: ").strip()
+            if entrada.isdigit():
+                cliente = int(entrada)  #Lo transoformo a entero
+                break
+            else:
+                print("Ingresá un número de documento válido.")
+
+        password = input("Ingrese su password\n")
         password = cifrador.encrypt(password.encode())
-        peticion = lastnews_pb2.ClientRequest(client=41460004,passw=password)
+        peticion = lastnews_pb2.ClientRequest(client=cliente,passw=password)
 
         # Realizar la llamada RPC
         try:
