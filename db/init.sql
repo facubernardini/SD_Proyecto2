@@ -228,7 +228,7 @@ BEGIN
 END;//
 
 CREATE PROCEDURE eliminar_categoria (
-  IN p_nombre_categoria INT
+  IN p_nombre_categoria VARCHAR(100)
 )
 BEGIN
   DELETE FROM categorias
