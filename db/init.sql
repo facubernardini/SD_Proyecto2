@@ -228,11 +228,11 @@ BEGIN
 END;//
 
 CREATE PROCEDURE eliminar_categoria (
-  IN p_id_categoria INT
+  IN p_nombre_categoria INT
 )
 BEGIN
   DELETE FROM categorias
-  WHERE id_categoria = p_id_categoria;
+  WHERE nombre = p_nombre_categoria;
 END;//
 
 CREATE PROCEDURE suscribir_cliente_categoria (
