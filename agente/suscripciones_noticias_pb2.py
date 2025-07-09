@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1csuscripciones_noticias.proto\x12\rsuscripciones\"A\n\x0b\x43lienteArea\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x0c\n\x04\x61rea\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"+\n\tRespuesta\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\x12\r\n\x05\x65xito\x18\x02 \x01(\x08\"\x16\n\x04\x41rea\x12\x0e\n\x06nombre\x18\x01 \x01(\t\"!\n\rListaClientes\x12\x10\n\x08\x63lientes\x18\x01 \x03(\t\";\n\x07Noticia\x12\x0e\n\x06titulo\x18\x01 \x01(\t\x12\x11\n\tcontenido\x18\x02 \x01(\t\x12\r\n\x05\x66\x65\x63ha\x18\x03 \x01(\t\"9\n\rListaNoticias\x12(\n\x08noticias\x18\x01 \x03(\x0b\x32\x16.suscripciones.Noticia2\xc6\x02\n\x15SuscripcionesNoticias\x12I\n\x11SubscribirCliente\x12\x1a.suscripciones.ClienteArea\x1a\x18.suscripciones.Respuesta\x12I\n\x11\x42orrarSuscripcion\x12\x1a.suscripciones.ClienteArea\x1a\x18.suscripciones.Respuesta\x12K\n\x16ObtenerClientesPorArea\x12\x13.suscripciones.Area\x1a\x1c.suscripciones.ListaClientes\x12J\n\x15ObtenerNoticiasDeArea\x12\x13.suscripciones.Area\x1a\x1c.suscripciones.ListaNoticiasb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1csuscripciones_noticias.proto\x12\rsuscripciones\"A\n\x0b\x43lienteArea\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x0c\n\x04\x61rea\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"+\n\tRespuesta\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\x12\r\n\x05\x65xito\x18\x02 \x01(\x08\";\n\x07Noticia\x12\x0e\n\x06titulo\x18\x01 \x01(\t\x12\x11\n\tcontenido\x18\x02 \x01(\t\x12\r\n\x05\x66\x65\x63ha\x18\x03 \x01(\t\"9\n\rListaNoticias\x12(\n\x08noticias\x18\x01 \x03(\x0b\x32\x16.suscripciones.Noticia2\x80\x02\n\x15SuscripcionesNoticias\x12I\n\x11SubscribirCliente\x12\x1a.suscripciones.ClienteArea\x1a\x18.suscripciones.Respuesta\x12I\n\x11\x42orrarSuscripcion\x12\x1a.suscripciones.ClienteArea\x1a\x18.suscripciones.Respuesta\x12Q\n\x15ObtenerNoticiasDeArea\x12\x1a.suscripciones.ClienteArea\x1a\x1c.suscripciones.ListaNoticiasb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,14 +35,10 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CLIENTEAREA']._serialized_end=112
   _globals['_RESPUESTA']._serialized_start=114
   _globals['_RESPUESTA']._serialized_end=157
-  _globals['_AREA']._serialized_start=159
-  _globals['_AREA']._serialized_end=181
-  _globals['_LISTACLIENTES']._serialized_start=183
-  _globals['_LISTACLIENTES']._serialized_end=216
-  _globals['_NOTICIA']._serialized_start=218
-  _globals['_NOTICIA']._serialized_end=277
-  _globals['_LISTANOTICIAS']._serialized_start=279
-  _globals['_LISTANOTICIAS']._serialized_end=336
-  _globals['_SUSCRIPCIONESNOTICIAS']._serialized_start=339
-  _globals['_SUSCRIPCIONESNOTICIAS']._serialized_end=665
+  _globals['_NOTICIA']._serialized_start=159
+  _globals['_NOTICIA']._serialized_end=218
+  _globals['_LISTANOTICIAS']._serialized_start=220
+  _globals['_LISTANOTICIAS']._serialized_end=277
+  _globals['_SUSCRIPCIONESNOTICIAS']._serialized_start=280
+  _globals['_SUSCRIPCIONESNOTICIAS']._serialized_end=536
 # @@protoc_insertion_point(module_scope)
