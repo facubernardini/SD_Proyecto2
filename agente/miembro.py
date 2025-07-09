@@ -10,6 +10,15 @@ import os
 from cryptography.fernet import Fernet
 import hashlib
 
+import signal
+import sys
+
+def manejar_ctrl_c(signal, frame):
+    print("Se ha presionado Ctrl+C. Finalizando el programa...")
+    sys.exit(0)
+signal.signal(signal.SIGINT, manejar_ctrl_c)
+
+
 class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def __init__(self, db):
         self.db = db
@@ -19,13 +28,11 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
         cursor = self.db.cursor()
         try:
             # descifrar password
-            password_plano = self.fernet.decrypt(request.password.encode()).decode()
-            # calcular el md5
-            password_md5 = hashlib.md5(password_plano.encode()).hexdigest()
+            password_plano = self.fernet.decrypt(request.password.encode()).decode("utf-8")
+            print("password_plano::",password_plano)
             # verificar cliente
             cursor.execute(
-                "SELECT id_cliente FROM clientes WHERE id_cliente=%s AND password_cliente=%s",
-                (request.cliente_id, password_md5)
+                "SELECT id_cliente FROM clientes WHERE id_cliente='{}' AND password_cliente=MD5('{}');".format(request.cliente_id, password_plano)
             )
             cliente = cursor.fetchone()
             if not cliente:
@@ -58,15 +65,11 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def BorrarSuscripcion(self, request, context):
         cursor = self.db.cursor()
         try:
-            # desencriptar contraseña enviada
-            password_plano = self.fernet.decrypt(request.password.encode()).decode()
-
-            password_md5 = hashlib.md5(password_plano.encode()).hexdigest()
-
+            # descifrar password
+            password_plano = self.fernet.decrypt(request.password.encode()).decode("utf-8")
             # verificar cliente
             cursor.execute(
-                "SELECT id_cliente FROM clientes WHERE id_cliente=%s AND password_cliente=%s",
-                (request.cliente_id, password_md5)
+                "SELECT id_cliente FROM clientes WHERE id_cliente='{}' AND password_cliente=MD5('{}');".format(request.cliente_id, password_plano)
             )
             cliente = cursor.fetchone()
             if not cliente:
@@ -99,32 +102,17 @@ class ServicioSuscripciones(pb2_grpc.SuscripcionesNoticiasServicer):
     def ObtenerNoticiasDeArea(self, request, context):
         cursor = self.db.cursor()
         try:
-            # desencriptar contraseña enviada
-            password_plano = self.fernet.decrypt(request.password.encode()).decode()
-
-            password_md5 = hashlib.md5(password_plano.encode()).hexdigest()
-
+            # descifrar password
+            password_plano = self.fernet.decrypt(request.password.encode()).decode("utf-8")
+            # verificar cliente
             cursor.execute(
-                "SELECT id_cliente FROM clientes WHERE id_cliente=%s AND password_cliente=%s",
-                (request.cliente_id, password_md5)
+                "SELECT id_cliente FROM clientes WHERE id_cliente='{}' AND password_cliente=MD5('{}');".format(request.cliente_id, password_plano)
             )
             cliente = cursor.fetchone()
             if not cliente:
                 return pb2.ListaNoticias(noticias=[])
 
-            cursor.execute("SELECT id_categoria FROM categorias WHERE nombre=%s", (request.area,))
-            area = cursor.fetchone()
-            if not area:
-                return pb2.ListaNoticias(noticias=[])
-
-            cursor.execute("""
-                SELECT titulo, contenido, time_stamp
-                FROM noticias
-                JOIN noticia_categoria nc ON noticias.id_noticia = nc.id_noticia
-                WHERE nc.id_categoria=%s
-                ORDER BY time_stamp DESC
-                LIMIT 3
-            """, (area[0],))
+            cursor.execute("SELECT titulo, contenido, time_stamp FROM cliente_categoria as cc JOIN noticia_categoria as nc JOIN noticias as n JOIN categorias as cat WHERE cc.id_cliente = {} AND cc.id_categoria = nc.id_categoria AND cc.id_categoria = cat.id_categoria AND cat.nombre = '{}' AND nc.id_noticia = n.id_noticia ORDER BY time_stamp DESC LIMIT 3;".format(cliente[0],request.area.capitalize()))
             noticias = [
                 pb2.Noticia(
                     titulo=row[0],
@@ -144,9 +132,9 @@ def main():
     for intento in range(10):
         try:
             db = mysql.connector.connect(
-                host="mysql_db",
+                host="localhost",
                 user="root",
-                password="root",
+                password="admin",
                 database="consorcio"
             )
             print("ConexiÃ³n a la base de datos exitosa.")

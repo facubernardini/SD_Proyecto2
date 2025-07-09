@@ -5,7 +5,7 @@ import warnings
 
 import suscripciones_noticias_pb2 as suscripciones__noticias__pb2
 
-GRPC_GENERATED_VERSION = '1.73.0'
+GRPC_GENERATED_VERSION = '1.73.1'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -44,14 +44,9 @@ class SuscripcionesNoticiasStub(object):
                 request_serializer=suscripciones__noticias__pb2.ClienteArea.SerializeToString,
                 response_deserializer=suscripciones__noticias__pb2.Respuesta.FromString,
                 _registered_method=True)
-        self.ObtenerClientesPorArea = channel.unary_unary(
-                '/suscripciones.SuscripcionesNoticias/ObtenerClientesPorArea',
-                request_serializer=suscripciones__noticias__pb2.Area.SerializeToString,
-                response_deserializer=suscripciones__noticias__pb2.ListaClientes.FromString,
-                _registered_method=True)
         self.ObtenerNoticiasDeArea = channel.unary_unary(
                 '/suscripciones.SuscripcionesNoticias/ObtenerNoticiasDeArea',
-                request_serializer=suscripciones__noticias__pb2.Area.SerializeToString,
+                request_serializer=suscripciones__noticias__pb2.ClienteArea.SerializeToString,
                 response_deserializer=suscripciones__noticias__pb2.ListaNoticias.FromString,
                 _registered_method=True)
 
@@ -66,12 +61,6 @@ class SuscripcionesNoticiasServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def BorrarSuscripcion(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def ObtenerClientesPorArea(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -96,14 +85,9 @@ def add_SuscripcionesNoticiasServicer_to_server(servicer, server):
                     request_deserializer=suscripciones__noticias__pb2.ClienteArea.FromString,
                     response_serializer=suscripciones__noticias__pb2.Respuesta.SerializeToString,
             ),
-            'ObtenerClientesPorArea': grpc.unary_unary_rpc_method_handler(
-                    servicer.ObtenerClientesPorArea,
-                    request_deserializer=suscripciones__noticias__pb2.Area.FromString,
-                    response_serializer=suscripciones__noticias__pb2.ListaClientes.SerializeToString,
-            ),
             'ObtenerNoticiasDeArea': grpc.unary_unary_rpc_method_handler(
                     servicer.ObtenerNoticiasDeArea,
-                    request_deserializer=suscripciones__noticias__pb2.Area.FromString,
+                    request_deserializer=suscripciones__noticias__pb2.ClienteArea.FromString,
                     response_serializer=suscripciones__noticias__pb2.ListaNoticias.SerializeToString,
             ),
     }
@@ -172,33 +156,6 @@ class SuscripcionesNoticias(object):
             _registered_method=True)
 
     @staticmethod
-    def ObtenerClientesPorArea(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/suscripciones.SuscripcionesNoticias/ObtenerClientesPorArea',
-            suscripciones__noticias__pb2.Area.SerializeToString,
-            suscripciones__noticias__pb2.ListaClientes.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
     def ObtenerNoticiasDeArea(request,
             target,
             options=(),
@@ -213,7 +170,7 @@ class SuscripcionesNoticias(object):
             request,
             target,
             '/suscripciones.SuscripcionesNoticias/ObtenerNoticiasDeArea',
-            suscripciones__noticias__pb2.Area.SerializeToString,
+            suscripciones__noticias__pb2.ClienteArea.SerializeToString,
             suscripciones__noticias__pb2.ListaNoticias.FromString,
             options,
             channel_credentials,
