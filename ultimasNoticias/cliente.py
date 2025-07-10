@@ -5,7 +5,7 @@ from cryptography.fernet import Fernet
 
 def ejecutar_cliente():
     # Crear un canal inseguro al servidor
-    with grpc.insecure_channel('localhost:50051') as channel:
+    with grpc.insecure_channel('localhost:50053') as channel:
         # Crear un stub (cliente)
         stub = lastnews_pb2_grpc.LastNewsStub(channel)
 

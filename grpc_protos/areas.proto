@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package adminareas;
+
+service AdminAreas {
+  rpc AddArea (ClientRequest) returns (Response) {}
+  rpc DeleteArea (ClientRequest) returns (Response) {}
+  rpc ShowAreas (AreasRequest) returns (Response) {}
+}
+
+message ClientRequest {
+  int32 client = 1;
+  string passw = 2;
+  string area = 3;
+}
+
+message AreasRequest {
+  int32 client = 1;
+  string passw = 2;
+}
+
+message Response {
+  string response = 1;
+}

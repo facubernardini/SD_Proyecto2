@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package lastnews;
 
-option go_package = "/grpc/lastnews";
-
 service LastNews {
   rpc InformLastNews (ClientRequest) returns (Response) {}
 }
