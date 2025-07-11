@@ -71,7 +71,8 @@ class LastNewsServicer(lastnews_pb2_grpc.LastNewsServicer):
 
 
 def iniciar_servidor():
-
+    logging.basicConfig(filename='lastNews.log', level=logging.INFO)
+    logger.info('Started')
     servidor = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     lastnews_pb2_grpc.add_LastNewsServicer_to_server(
         LastNewsServicer(), servidor
