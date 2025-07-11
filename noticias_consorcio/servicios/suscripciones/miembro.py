@@ -148,7 +148,7 @@ def main():
     pb2_grpc.add_SuscripcionesNoticiasServicer_to_server(ServicioSuscripciones(db), server)   
     server.add_insecure_port('[::]:50055')
     server.start()
-    print("Servidor escuchando en puerto 50051...")
+    print("Servidor escuchando en puerto 50055...")
     server.wait_for_termination()
 
 
