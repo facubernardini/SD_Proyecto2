@@ -1,12 +1,13 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY miembro.py .
-COPY suscripciones_noticias.proto .
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install grpcio grpcio-tools mysql-connector-python cryptography
+COPY . .
 
-RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. suscripciones_noticias.proto
+EXPOSE 50055
 
+# Comando para ejecutar tu servidor
 CMD ["python", "miembro.py"]
