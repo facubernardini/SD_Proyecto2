@@ -33,23 +33,23 @@ def ejecutar_cliente():
         # except grpc.RpcError as e:
         #     print(f"Error en la llamada RPC: {e.code()}: {e.details()}")
         
-        # # ELIMINAR AREA
-        # password = input("Ingrese su password\n")
-        # password = cifrador.encrypt(password.encode())
-        # area = input("Ingrese el nombre del Area a eliminar\n")
-        # peticion = areas_pb2.ClientRequest(client=cliente,passw=password,area=area)
-
-        # # Realizar la llamada RPC
-        # try:
-        #     respuesta = stub.DeleteArea(peticion)
-        #     print(f"Respuesta del servidor: \n{respuesta.response}")
-        # except grpc.RpcError as e:
-        #     print(f"Error en la llamada RPC: {e.code()}: {e.details()}")
-        
-        # MOSTRAR AREAS
+        # ELIMINAR AREA
         password = input("Ingrese su password\n")
         password = cifrador.encrypt(password.encode())
-        peticion = areas_pb2.ClientRequest(client=cliente,passw=password)
+        area = input("Ingrese el nombre del Area a eliminar\n")
+        peticion = areas_pb2.ClientRequest(client=cliente,passw=password,area=area)
+
+        # Realizar la llamada RPC
+        try:
+            respuesta = stub.DeleteArea(peticion)
+            print(f"Respuesta del servidor: \n{respuesta.response}")
+        except grpc.RpcError as e:
+            print(f"Error en la llamada RPC: {e.code()}: {e.details()}")
+        
+        # # MOSTRAR AREAS
+        # password = input("Ingrese su password\n")
+        # password = cifrador.encrypt(password.encode())
+        # peticion = areas_pb2.ClientRequest(client=cliente,passw=password)
 
         # Realizar la llamada RPC
         try:
