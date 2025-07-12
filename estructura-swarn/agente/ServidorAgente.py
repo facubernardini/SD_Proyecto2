@@ -3,9 +3,8 @@ import agente_pb2
 import agente_pb2_grpc
 import lastnews_pb2
 import lastnews_pb2_grpc
-
-import suscripciones_pb2
-import suscripciones_pb2_grpc
+import tareas_pb2
+import tareas_pb2_grpc
 
 from concurrent import futures
 
@@ -21,8 +20,11 @@ class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
     
     def Login(self, request,context):
         print(f"Solicitud de Login recibida de usuario: {request.dni}")
+        channel = grpc.insecure_channel('tareas:50055') 
+        stub = tareas_pb2_grpc.TareasServiceStub(channel)
+        response = stub.Login(tareas_pb2.LoginRequest(cliente=request.dni, password=request.password))
         #Aca debo conectarme al Login del miemro y devolver su respuesta
-        return agente_pb2.ResultadoLogin(resultado=True)
+        return agente_pb2.ResultadoLogin(resultado=response.success)
 
     def SuscribirNuevaCategoria(self, request, context):
         print(f"Solicitud de suscripcion a nueva categoria del usuario {request.cliente_id} al area {request.area}")
@@ -36,8 +38,11 @@ class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
     
     def BorrarSuscripcionCategoria(self, request, context):
         print(f"Se solicito la anulacion a una suscripcion a la categoria {request.area} del usuario {request.cliente_id} ")
-        #Aca debo conectarme a Borrar suscripcion del miembro
-        return agente_pb2.ResultadoSuscribirNuevaCategoria(mensaje="se borro con exito", exito =True)
+        with grpc.insecure_channel('suscripciones:50054') as channel:    
+            stubSuscripciones = suscripciones_pb2_grpc.SuscripcionesNoticiasStub(channel)
+            requestSuscribirCliente =suscripciones_pb2.ClienteArea(cliente_id=request.nombre_usuario,area=request.area,password=request.password)
+            responseSuscribirNuevaCategoria = stubSuscripciones.SubscribirCliente(requestSuscribirCliente)
+            return agente_pb2.noticiasInfo(mensaje=responseSuscribirNuevaCategoria.mensaje)
     
     def ObtenerUltimasNoticias(self, request, context):
         print(f"Se solicitaron las ultimas noticias de la categoria {request.area} por parte del usuario {request.cliente_id}")
