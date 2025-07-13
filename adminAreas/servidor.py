@@ -101,6 +101,18 @@ class AdminAreasServicer(areas_pb2_grpc.AdminAreasServicer):
 
                 cnx.autocommit = True
                 with cnx.cursor() as cursor:
+                    id_cat = ""
+                    cursor.execute("SELECT id_categoria FROM categorias WHERE nombre = '{}';".format(request.area))
+                    for (id_categoria) in cursor:
+                        id_cat = id_categoria[0]
+                    
+                    if id_cat=="":
+                        logger.info("El area {} no se encuentra regitrada.".format(request.client))
+                        return areas_pb2.Response(response="Nombre de cateogria no registrado")
+                    
+                    cursor.execute("DELETE FROM cliente_categoria WHERE id_categoria = '{}';".format(id_cat))
+                    cursor.execute("DELETE FROM noticia_categoria WHERE id_categoria = '{}';".format(id_cat))
+                    
                     args = [request.area]
                     cursor.callproc("eliminar_categoria", args)
                     areas = show_categorias(cnx)
