@@ -274,6 +274,7 @@ INSERT INTO categorias(nombre) VALUES ('Finanzas');
 INSERT INTO noticias(titulo, contenido) VALUES ('Choque sobre ruta 3', 'Por la madrugada del lunes chocaron dos vehiculos. No se registraron heridos.');
 INSERT INTO noticias(titulo, contenido) VALUES ('Cientificos reviven al Diego', 'Segun fuentes de tiktok aseguran haber revivido a Maradona pero ahora patea con la derecha');
 INSERT INTO noticias(titulo, contenido) VALUES ('Vuela el dolar', 'El dolar toca los $23049 por unidad');
+INSERT INTO noticias(titulo, contenido) VALUES ('prueba', 'prueba');
 
 INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460004, 1);
 INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460004, 2);

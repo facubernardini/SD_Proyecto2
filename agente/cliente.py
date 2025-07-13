@@ -16,20 +16,40 @@ def run():
             opciones = {
                 "1": lambda: obtener_noticias_24hs(stub, id_cliente, password),
                 "2": lambda: suscribirse_nueva_categoria(stub, id_cliente, password),
-                "3": lambda: borrarse_de_una_suscripcion(stub, id_cliente, password),
+                "3": lambda: agregar_nueva_categoria(stub, id_cliente, password),
                 "4": lambda: obtener_ultimas_noticias_categoria( stub, id_cliente, password),
+                "5": lambda: ver_categorias_inscripto(stub, id_cliente, password),
+                "6": lambda: borrar_area(stub, id_cliente, password),
             }
-            if opcion == "5":
+            if opcion == "7":
                 print("Saliendo...")
                 login = False
             elif opcion in opciones:
                 opciones[opcion]()
             else:
-                print("Opción inválida, por favor ingresá un número entre 1 y 4.")
+                print("Opción inválida, por favor ingresá un número entre 1 y 6.")
         print("Muchas gracias por utilizar el servicio de noticias CONSORCIO DCIC")
+def borrar_area(stub, id_cliente, password):
+    area = input("Ingrese el nombre del area que desea eliminar: ").split()[0]
+    request = agente_pb2.DatosBorrarArea(cliente_id=id_cliente ,password=password, area = area)
+    response = stub.BorrarArea(request)
+    print(f"Respuesta del servidor: {response.respuesta}")
+
+
+def ver_categorias_inscripto(stub, id_cliente, password):
+    request = agente_pb2.DatosVerCategoriasInscripto(cliente_id=id_cliente ,password=password)
+    response = stub.BorrarArea(request)
+    print(f"Respuesta del servidor: {response.respuesta}")
+
+def agregar_nueva_categoria(stub, id_cliente , password):
+    area = input("Ingrese el nombre de la categoria: ").split()[0]
+    request = agente_pb2.DatosAgregarCategoria(cliente_id=id_cliente ,password=password,area=area)
+    response = stub.AgregarCategoria(request)
+    print(f"Respuesta del servidor: {response.respuesta}")
 
 def obtener_ultimas_noticias_categoria(stub, id_cliente, password):
-    area = input("Ingrese el nombre de la categoria de la cual desea obtener las ultimas noticias: ").split()[0]
+    #area = input("Ingrese el nombre de la categoria de la cual desea obtener las ultimas noticias: ").split()[0]
+    area = ""
     request = agente_pb2.DatosObtenerUltimasNoticias(cliente_id=id_cliente ,password=password,area=area)
     response = stub.ObtenerUltimasNoticias(request)
     print(f"Las ultimas noticias del area {area} son: \n {response.mensaje}")
@@ -89,9 +109,11 @@ def mostrar_menu():
     print("\n===== ¿Que servicio desea utilizar?=====")
     print("1. Obtener noticias últimas 24 hs")
     print("2. Suscribirse a una nueva categoria")
-    print("3. Anular una suscripcion")
-    print("4. Obtener ultimas noticias de una categoria")
-    print("5. Salir")
+    print("3. Agregar Nueva Categoria")
+    print("4. Obtener ultimas noticias")
+    print("5. Ver categorias inscripto")
+    print("6. Borrar area")
+    print("7. Salir")
     print("===============================")
 
 def leer_password_con_asteriscos():

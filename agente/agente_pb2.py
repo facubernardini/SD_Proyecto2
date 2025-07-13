@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x61gente.proto\x12\x06\x61gente\";\n\x0fnoticiasRequest\x12\x16\n\x0enombre_usuario\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1f\n\x0cnoticiasInfo\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\"+\n\nLoginDatos\x12\x0b\n\x03\x64ni\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\"#\n\x0eResultadoLogin\x12\x11\n\tresultado\x18\x01 \x01(\x08\"R\n\x1c\x44\x61tosSuscribirNuevaCategoria\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x0c\n\x04\x61rea\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"B\n ResultadoSuscribirNuevaCategoria\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\x12\r\n\x05\x65xito\x18\x02 \x01(\x08\"Q\n\x1b\x44\x61tosObtenerUltimasNoticias\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0c\n\x04\x61rea\x18\x03 \x01(\t2\xc1\x03\n\x0fServicio_Agente\x12K\n\x1aObtenerNoticiasUltimas24hs\x12\x17.agente.noticiasRequest\x1a\x14.agente.noticiasInfo\x12\x33\n\x05Login\x12\x12.agente.LoginDatos\x1a\x16.agente.ResultadoLogin\x12i\n\x17SuscribirNuevaCategoria\x12$.agente.DatosSuscribirNuevaCategoria\x1a(.agente.ResultadoSuscribirNuevaCategoria\x12l\n\x1a\x42orrarSuscripcionCategoria\x12$.agente.DatosSuscribirNuevaCategoria\x1a(.agente.ResultadoSuscribirNuevaCategoria\x12S\n\x16ObtenerUltimasNoticias\x12#.agente.DatosObtenerUltimasNoticias\x1a\x14.agente.noticiasInfob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x61gente.proto\x12\x06\x61gente\";\n\x0fnoticiasRequest\x12\x16\n\x0enombre_usuario\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1f\n\x0cnoticiasInfo\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\"+\n\nLoginDatos\x12\x0b\n\x03\x64ni\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\"#\n\x0eResultadoLogin\x12\x11\n\tresultado\x18\x01 \x01(\x08\"R\n\x1c\x44\x61tosSuscribirNuevaCategoria\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x0c\n\x04\x61rea\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"B\n ResultadoSuscribirNuevaCategoria\x12\x0f\n\x07mensaje\x18\x01 \x01(\t\x12\r\n\x05\x65xito\x18\x02 \x01(\x08\"Q\n\x1b\x44\x61tosObtenerUltimasNoticias\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0c\n\x04\x61rea\x18\x03 \x01(\t\"K\n\x15\x44\x61tosAgregarCategoria\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0c\n\x04\x61rea\x18\x03 \x01(\t\".\n\x19ResultadoAgregarCategoria\x12\x11\n\trespuesta\x18\x01 \x01(\t\"C\n\x1b\x44\x61tosVerCategoriasInscripto\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\"0\n\x1bRespuestaCategoriaInscripto\x12\x11\n\trespuesta\x18\x01 \x01(\t\"E\n\x0f\x44\x61tosBorrarArea\x12\x12\n\ncliente_id\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0c\n\x04\x61rea\x18\x03 \x01(\t\"(\n\x13RespuestaBorrarArea\x12\x11\n\trespuesta\x18\x01 \x01(\t2\xbf\x05\n\x0fServicio_Agente\x12K\n\x1aObtenerNoticiasUltimas24hs\x12\x17.agente.noticiasRequest\x1a\x14.agente.noticiasInfo\x12\x33\n\x05Login\x12\x12.agente.LoginDatos\x1a\x16.agente.ResultadoLogin\x12T\n\x10\x41gregarCategoria\x12\x1d.agente.DatosAgregarCategoria\x1a!.agente.ResultadoAgregarCategoria\x12i\n\x17SuscribirNuevaCategoria\x12$.agente.DatosSuscribirNuevaCategoria\x1a(.agente.ResultadoSuscribirNuevaCategoria\x12\x42\n\nBorrarArea\x12\x17.agente.DatosBorrarArea\x1a\x1b.agente.RespuestaBorrarArea\x12l\n\x1a\x42orrarSuscripcionCategoria\x12$.agente.DatosSuscribirNuevaCategoria\x1a(.agente.ResultadoSuscribirNuevaCategoria\x12S\n\x16ObtenerUltimasNoticias\x12#.agente.DatosObtenerUltimasNoticias\x1a\x14.agente.noticiasInfo\x12\x62\n\x16VerCategoriasInscripto\x12#.agente.DatosVerCategoriasInscripto\x1a#.agente.RespuestaCategoriaInscriptob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -45,6 +45,18 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_RESULTADOSUSCRIBIRNUEVACATEGORIA']._serialized_end=350
   _globals['_DATOSOBTENERULTIMASNOTICIAS']._serialized_start=352
   _globals['_DATOSOBTENERULTIMASNOTICIAS']._serialized_end=433
-  _globals['_SERVICIO_AGENTE']._serialized_start=436
-  _globals['_SERVICIO_AGENTE']._serialized_end=885
+  _globals['_DATOSAGREGARCATEGORIA']._serialized_start=435
+  _globals['_DATOSAGREGARCATEGORIA']._serialized_end=510
+  _globals['_RESULTADOAGREGARCATEGORIA']._serialized_start=512
+  _globals['_RESULTADOAGREGARCATEGORIA']._serialized_end=558
+  _globals['_DATOSVERCATEGORIASINSCRIPTO']._serialized_start=560
+  _globals['_DATOSVERCATEGORIASINSCRIPTO']._serialized_end=627
+  _globals['_RESPUESTACATEGORIAINSCRIPTO']._serialized_start=629
+  _globals['_RESPUESTACATEGORIAINSCRIPTO']._serialized_end=677
+  _globals['_DATOSBORRARAREA']._serialized_start=679
+  _globals['_DATOSBORRARAREA']._serialized_end=748
+  _globals['_RESPUESTABORRARAREA']._serialized_start=750
+  _globals['_RESPUESTABORRARAREA']._serialized_end=790
+  _globals['_SERVICIO_AGENTE']._serialized_start=793
+  _globals['_SERVICIO_AGENTE']._serialized_end=1496
 # @@protoc_insertion_point(module_scope)
