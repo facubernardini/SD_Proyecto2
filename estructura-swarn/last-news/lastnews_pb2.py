@@ -24,14 +24,13 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0elastnews.proto\x12\x08lastnews\".\n\rClientRequest\x12\x0e\n\x06\x63lient\x18\x01 \x01(\x05\x12\r\n\x05passw\x18\x02 \x01(\t\"\x18\n\x08Response\x12\x0c\n\x04news\x18\x01 \x01(\t2K\n\x08LastNews\x12?\n\x0eInformLastNews\x12\x17.lastnews.ClientRequest\x1a\x12.lastnews.Response\"\x00\x42\x10Z\x0e/grpc/lastnewsb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0elastnews.proto\x12\x08lastnews\".\n\rClientRequest\x12\x0e\n\x06\x63lient\x18\x01 \x01(\x05\x12\r\n\x05passw\x18\x02 \x01(\t\"\x18\n\x08Response\x12\x0c\n\x04news\x18\x01 \x01(\t2K\n\x08LastNews\x12?\n\x0eInformLastNews\x12\x17.lastnews.ClientRequest\x1a\x12.lastnews.Response\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'lastnews_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
-  _globals['DESCRIPTOR']._loaded_options = None
-  _globals['DESCRIPTOR']._serialized_options = b'Z\016/grpc/lastnews'
+  DESCRIPTOR._loaded_options = None
   _globals['_CLIENTREQUEST']._serialized_start=28
   _globals['_CLIENTREQUEST']._serialized_end=74
   _globals['_RESPONSE']._serialized_start=76

@@ -9,7 +9,7 @@ services:
     volumes:
       - mysql_volume:/var/lib/mysql
       - /init-base/init.sql:/docker-entrypoint-initdb.d/init.sql:Z
-    ports
+    ports:
       - target: 3306
         published: 3306
         protocol: tcp
