@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expone el puerto donde el servidor gRPC escucha
-EXPOSE 50053
+EXPOSE 50054
 
 # Comando para ejecutar tu servidor
 CMD ["python", "servidor.py"]

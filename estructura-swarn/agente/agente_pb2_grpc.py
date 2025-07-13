@@ -45,10 +45,20 @@ class Servicio_AgenteStub(object):
                 request_serializer=agente__pb2.LoginDatos.SerializeToString,
                 response_deserializer=agente__pb2.ResultadoLogin.FromString,
                 _registered_method=True)
+        self.AgregarCategoria = channel.unary_unary(
+                '/agente.Servicio_Agente/AgregarCategoria',
+                request_serializer=agente__pb2.DatosAgregarCategoria.SerializeToString,
+                response_deserializer=agente__pb2.ResultadoAgregarCategoria.FromString,
+                _registered_method=True)
         self.SuscribirNuevaCategoria = channel.unary_unary(
                 '/agente.Servicio_Agente/SuscribirNuevaCategoria',
                 request_serializer=agente__pb2.DatosSuscribirNuevaCategoria.SerializeToString,
                 response_deserializer=agente__pb2.ResultadoSuscribirNuevaCategoria.FromString,
+                _registered_method=True)
+        self.BorrarArea = channel.unary_unary(
+                '/agente.Servicio_Agente/BorrarArea',
+                request_serializer=agente__pb2.DatosBorrarArea.SerializeToString,
+                response_deserializer=agente__pb2.RespuestaBorrarArea.FromString,
                 _registered_method=True)
         self.BorrarSuscripcionCategoria = channel.unary_unary(
                 '/agente.Servicio_Agente/BorrarSuscripcionCategoria',
@@ -59,6 +69,11 @@ class Servicio_AgenteStub(object):
                 '/agente.Servicio_Agente/ObtenerUltimasNoticias',
                 request_serializer=agente__pb2.DatosObtenerUltimasNoticias.SerializeToString,
                 response_deserializer=agente__pb2.noticiasInfo.FromString,
+                _registered_method=True)
+        self.VerCategoriasInscripto = channel.unary_unary(
+                '/agente.Servicio_Agente/VerCategoriasInscripto',
+                request_serializer=agente__pb2.DatosVerCategoriasInscripto.SerializeToString,
+                response_deserializer=agente__pb2.RespuestaCategoriaInscripto.FromString,
                 _registered_method=True)
 
 
@@ -78,7 +93,19 @@ class Servicio_AgenteServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AgregarCategoria(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def SuscribirNuevaCategoria(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def BorrarArea(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -91,6 +118,12 @@ class Servicio_AgenteServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ObtenerUltimasNoticias(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def VerCategoriasInscripto(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -109,10 +142,20 @@ def add_Servicio_AgenteServicer_to_server(servicer, server):
                     request_deserializer=agente__pb2.LoginDatos.FromString,
                     response_serializer=agente__pb2.ResultadoLogin.SerializeToString,
             ),
+            'AgregarCategoria': grpc.unary_unary_rpc_method_handler(
+                    servicer.AgregarCategoria,
+                    request_deserializer=agente__pb2.DatosAgregarCategoria.FromString,
+                    response_serializer=agente__pb2.ResultadoAgregarCategoria.SerializeToString,
+            ),
             'SuscribirNuevaCategoria': grpc.unary_unary_rpc_method_handler(
                     servicer.SuscribirNuevaCategoria,
                     request_deserializer=agente__pb2.DatosSuscribirNuevaCategoria.FromString,
                     response_serializer=agente__pb2.ResultadoSuscribirNuevaCategoria.SerializeToString,
+            ),
+            'BorrarArea': grpc.unary_unary_rpc_method_handler(
+                    servicer.BorrarArea,
+                    request_deserializer=agente__pb2.DatosBorrarArea.FromString,
+                    response_serializer=agente__pb2.RespuestaBorrarArea.SerializeToString,
             ),
             'BorrarSuscripcionCategoria': grpc.unary_unary_rpc_method_handler(
                     servicer.BorrarSuscripcionCategoria,
@@ -123,6 +166,11 @@ def add_Servicio_AgenteServicer_to_server(servicer, server):
                     servicer.ObtenerUltimasNoticias,
                     request_deserializer=agente__pb2.DatosObtenerUltimasNoticias.FromString,
                     response_serializer=agente__pb2.noticiasInfo.SerializeToString,
+            ),
+            'VerCategoriasInscripto': grpc.unary_unary_rpc_method_handler(
+                    servicer.VerCategoriasInscripto,
+                    request_deserializer=agente__pb2.DatosVerCategoriasInscripto.FromString,
+                    response_serializer=agente__pb2.RespuestaCategoriaInscripto.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -191,6 +239,33 @@ class Servicio_Agente(object):
             _registered_method=True)
 
     @staticmethod
+    def AgregarCategoria(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/agente.Servicio_Agente/AgregarCategoria',
+            agente__pb2.DatosAgregarCategoria.SerializeToString,
+            agente__pb2.ResultadoAgregarCategoria.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
     def SuscribirNuevaCategoria(request,
             target,
             options=(),
@@ -207,6 +282,33 @@ class Servicio_Agente(object):
             '/agente.Servicio_Agente/SuscribirNuevaCategoria',
             agente__pb2.DatosSuscribirNuevaCategoria.SerializeToString,
             agente__pb2.ResultadoSuscribirNuevaCategoria.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def BorrarArea(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/agente.Servicio_Agente/BorrarArea',
+            agente__pb2.DatosBorrarArea.SerializeToString,
+            agente__pb2.RespuestaBorrarArea.FromString,
             options,
             channel_credentials,
             insecure,
@@ -261,6 +363,33 @@ class Servicio_Agente(object):
             '/agente.Servicio_Agente/ObtenerUltimasNoticias',
             agente__pb2.DatosObtenerUltimasNoticias.SerializeToString,
             agente__pb2.noticiasInfo.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def VerCategoriasInscripto(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/agente.Servicio_Agente/VerCategoriasInscripto',
+            agente__pb2.DatosVerCategoriasInscripto.SerializeToString,
+            agente__pb2.RespuestaCategoriaInscripto.FromString,
             options,
             channel_credentials,
             insecure,

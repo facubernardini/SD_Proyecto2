@@ -39,12 +39,45 @@ message DatosObtenerUltimasNoticias{
   string area = 3;
 }
 
+message DatosAgregarCategoria{
+  int32 cliente_id = 1;
+  string password = 2;
+  string area = 3;
+}
+
+message ResultadoAgregarCategoria{
+  string respuesta = 1;
+}
+
+message DatosVerCategoriasInscripto{
+  int32 cliente_id = 1;
+  string password = 2;
+}
+
+message RespuestaCategoriaInscripto{
+  string respuesta = 1;
+}
+
+message DatosBorrarArea{
+  int32 cliente_id = 1;
+  string password = 2;
+  string area = 3;
+}
+
+message RespuestaBorrarArea{
+  string respuesta = 1;
+}
+
+
 // Servicio
 service Servicio_Agente {
   rpc ObtenerNoticiasUltimas24hs (noticiasRequest) returns (noticiasInfo);
   rpc Login (LoginDatos) returns (ResultadoLogin);
+  rpc AgregarCategoria (DatosAgregarCategoria) returns (ResultadoAgregarCategoria);
   rpc SuscribirNuevaCategoria (DatosSuscribirNuevaCategoria) returns (ResultadoSuscribirNuevaCategoria);
+  rpc BorrarArea (DatosBorrarArea) returns  (RespuestaBorrarArea);
   rpc BorrarSuscripcionCategoria (DatosSuscribirNuevaCategoria) returns (ResultadoSuscribirNuevaCategoria);
   rpc ObtenerUltimasNoticias (DatosObtenerUltimasNoticias) returns (noticiasInfo);
+  rpc VerCategoriasInscripto (DatosVerCategoriasInscripto) returns (RespuestaCategoriaInscripto);
 }
 
