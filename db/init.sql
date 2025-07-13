@@ -179,7 +179,8 @@ CREATE PROCEDURE crear_noticia (
   IN p_id_cliente INT,
   IN p_id_categoria INT,
   IN p_titulo VARCHAR(255),
-  IN p_contenido TEXT
+  IN p_contenido TEXT,
+  OUT eliminado BOOL
 )
 BEGIN
   DECLARE v_id_noticia INT;
@@ -200,6 +201,10 @@ BEGIN
 
     INSERT INTO noticia_categoria (id_noticia, id_categoria)
     VALUES (v_id_noticia, p_id_categoria);
+
+    SET eliminado = TRUE;
+  ELSE
+    SET eliminado = FALSE;
   END IF;
 END;//
 
