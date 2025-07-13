@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package enviarnoticia;
+
+service EnviarNoticia {
+  rpc SendNews (ClientRequest) returns (Response) {}
+}
+
+message ClientRequest {
+  int32 client = 1;
+  string passw = 2;
+  string titulo = 3;
+  string contenido = 4;
+  string seccion = 5;
+}
+
+message Response {
+  string response = 1;
+}
