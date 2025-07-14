@@ -72,11 +72,10 @@ def borrarse_de_una_suscripcion(stub, id_cliente, password):
     print(f"Resultado de la operacion: {response.exito} ")
 
 def suscribirse_nueva_categoria(stub, id_cliente, password):
-    #area = input("Ingresá el area a la cual desea suscribirse: ").split()[0]
-    #request = agente_pb2.DatosSuscribirNuevaCategoria(cliente_id=id_cliente, area=area, password=password)
-    #response = stub.SuscribirNuevaCategoria(request)
-    #print("Respuesta del servidor:\n", response.mensaje)
-    #print(f"Resultado de la operacion: {response.exito} ")
+    area = input("Ingresá el area a la cual desea suscribirse: ").split()[0]
+    request = agente_pb2.DatosSuscribirNuevaCategoria(cliente_id=id_cliente, area=area, password=password)
+    response = stub.SuscribirNuevaCategoria(request)
+    print("Respuesta del servidor:\n", response.mensaje)
     print("Servicio en mantenimiento")
 
 def realizar_login(stub):
