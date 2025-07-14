@@ -300,25 +300,53 @@ DELIMITER ;
 INSERT INTO clientes(id_cliente, password_cliente, nombre, email) VALUES (41460004, MD5('prueba'), 'Mario', 'prueba@hola.com');
 INSERT INTO clientes(id_cliente, password_cliente, nombre, email) VALUES (41460005, MD5('prueba'), 'Pepe', 'prueba2@hola.com');
 INSERT INTO clientes(id_cliente, password_cliente, nombre, email) VALUES (41460006, MD5('prueba'), 'Pablo', 'prueba3@hola.com');
+INSERT INTO clientes(id_cliente, password_cliente, nombre, email) VALUES (23113032, MD5('prueba'), 'Ana', 'prueba4@hola.com');
+INSERT INTO clientes(id_cliente, password_cliente, nombre, email) VALUES (48322390, MD5('prueba'), 'María', 'prueba5@hola.com');
 
 INSERT INTO categorias(nombre) VALUES ('Policial');
 INSERT INTO categorias(nombre) VALUES ('Deportiva');
 INSERT INTO categorias(nombre) VALUES ('Finanzas');
+INSERT INTO categorias(nombre) VALUES ('Tecnologia');
+INSERT INTO categorias(nombre) VALUES ('Sociales');
 
 INSERT INTO noticias(titulo, contenido) VALUES ('Choque sobre ruta 3', 'Por la madrugada del lunes chocaron dos vehiculos. No se registraron heridos.');
 INSERT INTO noticias(titulo, contenido) VALUES ('Cientificos reviven al Diego', 'Segun fuentes de tiktok aseguran haber revivido a Maradona pero ahora patea con la derecha');
 INSERT INTO noticias(titulo, contenido) VALUES ('Docker', 'Estudiantes de DCIC afirmar que docker es extremandamente facil');
-
+INSERT INTO noticias(titulo, contenido) VALUES ('Neuralink', 'Neuralink realiza primera conexión cerebro-computadora 100% funcional.');
+INSERT INTO noticias(titulo, contenido) VALUES ('Starlink', 'Starlink ofrece internet satelital gratuito en zonas rurales de América Latina.');
+INSERT INTO noticias(titulo, contenido) VALUES ('Economía Argentina', 'Argentina lanza una moneda digital respaldada por el BCRA para reducir evasiones y facilitar transacciones.');
+INSERT INTO noticias(titulo, contenido) VALUES ('Lunes mas largos', 'Según investigadores, el tiempo se siente un 37% más largo los lunes debido al rechazo colectivo.');
+INSERT INTO noticias(titulo, contenido) VALUES ('IAs forman sociedad en Marte', 'Un experimento fallido dejó a varias IAs marcianas desarrollando normas y jerarquías propias.');
+INSERT INTO noticias(titulo, contenido) VALUES ('Gol desde la estratósfera', 'Un jugador marca tras lanzar la pelota desde un globo aeroespacial.');
+INSERT INTO noticias(titulo, contenido) VALUES ('Nuevas medidas de educación', 'Finlandia implementa jornada escolar de 4 días tras exitosa prueba educativa.');
 
 INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460004, 1);
 INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460004, 2);
+INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460004, 3);
+INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460004, 4);
 INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460005, 2);
+INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460005, 4);
 INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (41460006, 3);
+INSERT INTO cliente_categoria(id_cliente, id_categoria) VALUES (23113032, 3);
 
 INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (41460004, 1);
 INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (41460004, 2);
 INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (41460005, 3);
+INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (41460006, 4);
+INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (23113032, 5);
+INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (48322390, 6);
+INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (41460004, 7);
+INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (41460006, 8);
+INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (41460006, 9);
+INSERT INTO cliente_noticia(id_cliente, id_noticia) VALUES (48322390, 10);
 
 INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (1, 1);
 INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (2, 2);
-INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (3, 3);
+INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (3, 4);
+INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (4, 4);
+INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (5, 4);
+INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (6, 3);
+INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (7, 5);
+INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (8, 4);
+INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (9, 2);
+INSERT INTO noticia_categoria(id_noticia, id_categoria) VALUES (10, 5);
