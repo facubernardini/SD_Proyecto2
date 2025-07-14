@@ -11,10 +11,33 @@ import tareas_pb2_grpc
 import areas_pb2
 import areas_pb2_grpc
 
+import enviarnoticia_pb2
+import enviarnoticia_pb2_grpc
+
+import suscribecat_pb2
+import suscribecat_pb2_grpc
+
 from concurrent import futures
 
 # Implementación del servicio Servicio_Agente
 class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
+    def EnviarNoticia(self, request, context):
+        print(f"Solicitud de enviar una nueva noticia por parte del cliente {request.cliente_id} con titulo {request.titulo}")
+        with grpc.insecure_channel('enviarnoticia:50056') as channel:
+            stub = enviarnoticia_pb2_grpc.EnviarNoticiaStub(channel)
+            # Crear el mensaje de solicitud
+            requestEnviarNoticia = enviarnoticia_pb2.ClientRequest(
+                client=request.cliente_id,
+                passw=request. password ,
+                titulo=request.titulo,
+                contenido=request.contenido,
+                seccion=request.area,
+            )
+            # Llamar al método SendNews
+            response = stub.SendNews(requestEnviarNoticia)
+            return agente_pb2.RespuestaEnviarNoticia(respuesta=response.response)
+            
+
     def ObtenerNoticiasUltimas24hs(self, request, context):
         print(f"Solicitud de noticias delas ultimas 24hs recibida de usuario: {request.nombre_usuario}")
         with grpc.insecure_channel('lastnews:50053') as channel:    
@@ -28,17 +51,7 @@ class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
         channel = grpc.insecure_channel('tareas:50055') 
         stub = tareas_pb2_grpc.TareasServiceStub(channel)
         response = stub.Login(tareas_pb2.LoginRequest(cliente=request.dni, password=request.password))
-        #Aca debo conectarme al Login del miemro y devolver su respuesta
         return agente_pb2.ResultadoLogin(resultado=response.success)
-
-    #def SuscribirNuevaCategoria(self, request, context):
-        #print(f"Solicitud de suscripcion a nueva categoria del usuario {request.cliente_id} al area {request.area}")
-        #Aca debo conectarme al Suscrbir nueva categoria del miembro
-        #with grpc.insecure_channel('suscripciones:50054') as channel:    
-            #stubSuscripciones = suscripciones_pb2_grpc.SuscripcionesNoticiasStub(channel)
-            #requestSuscribirCliente =suscripciones_pb2.ClienteArea(cliente_id=request.nombre_usuario,area=request.area,password=request.password)
-            #responseSuscribirNuevaCategoria = stubSuscripciones.SubscribirCliente(requestSuscribirCliente)
-            #return agente_pb2.noticiasInfo(mensaje=responseSuscribirNuevaCategoria.mensaje)
 
     def AgregarCategoria(self, request, context):
         print(f"Se solicito la agregacion de una categoria por parte del usuario {request.cliente_id}")
@@ -75,27 +88,21 @@ class ServicioAgenteServicer(agente_pb2_grpc.Servicio_AgenteServicer):
             response = stub.DeleteArea(requestDeleteArea)
             return  agente_pb2.RespuestaCategoriaInscripto(respuesta = response.response)
 
-    def BorrarSuscripcionCategoria(self, request, context):
-        print(f"Se solicito la anulacion a una suscripcion a la categoria {request.area} del usuario {request.cliente_id} ")
-        with grpc.insecure_channel('suscripciones:50054') as channel:    
-            stubSuscripciones = suscripciones_pb2_grpc.SuscripcionesNoticiasStub(channel)
-            requestSuscribirCliente =suscripciones_pb2.ClienteArea(cliente_id=request.nombre_usuario,area=request.area,password=request.password)
-            responseSuscribirNuevaCategoria = stubSuscripciones.SubscribirCliente(requestSuscribirCliente)
-            return agente_pb2.noticiasInfo(mensaje=responseSuscribirNuevaCategoria.mensaje)
+    def SuscribirNuevaCategoria(self, request, context):
+        print(f"Se solicito la suscripcion a una suscripcion a la categoria {request.area} del usuario {request.cliente_id} ")
+        with grpc.insecure_channel('suscribecat:50057') as channel:
+            stub = suscribecat_pb2_grpc.SuscribeStub(channel) 
+            peticion = suscribecat_pb2.ClientRequest(client=request.cliente_id,passw=request.password,seccion=request.area)   
+            respuesta = stub.SuscribeCategoria(peticion)
+            return agente_pb2.noticiasInfo(mensaje=respuesta.response)
     
     def ObtenerUltimasNoticias(self, request, context):
         print(f"Se solicitaron las ultimas noticias de la categoria {request.area} por parte del usuario {request.cliente_id}")
-        with grpc.insecure_channel('lastnews:50053') as channel:
-            stubLastNews = lastnews_pb2_grpc.LastNewsStub(channel)
-        
-            requestInformLastNews = lastnews_pb2.ClientRequest(
-                client=request.cliente_id,
-                passw=request.password
-            )
-            responseLastNews = stubLastNews.InformLastNews(requestInformLastNews)
-        
-            return agente_pb2.ResultadoSuscribirNuevaCategoria(mensaje=responseLastNews.news)
-        return agente_pb2.ResultadoSuscribirNuevaCategoria(mensaje="\nNo se pudieron obtener las ultimas noticias - ERROR")
+        channel = grpc.insecure_channel('tareas:50055') 
+        stub = tareas_pb2_grpc.TareasServiceStub(channel)
+        response = stub.GetNews(tareas_pb2.GetNewsRequest(cliente=request.cliente_id))
+        noticia_str = f"Título: {response.titulo}\nContenido: {response.contenido}\nHora: {response.hora}"
+        return agente_pb2.noticiasInfo(mensaje=noticia_str)
 
 def servir():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

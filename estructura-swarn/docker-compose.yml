@@ -68,6 +68,35 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+
+
+  enviarnoticia:
+    image: enviarnoticia:latest
+    depends_on:
+      - mysql
+    ports:
+      - target: 50056
+        published: 50056
+        protocol: tcp
+        mode: ingress
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  suscribecat:
+    image: suscribecat:latest
+    depends_on:
+      - mysql
+    ports:
+      - target: 50057
+        published: 50057
+        protocol: tcp
+        mode: ingress
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 volumes:
   mysql_volume:
 

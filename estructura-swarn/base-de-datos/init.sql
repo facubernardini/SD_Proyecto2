@@ -104,6 +104,12 @@ JOIN clientes cli ON cc.id_cliente = cli.id_cliente
 JOIN categorias cat ON cc.id_categoria = cat.id_categoria;
 
 /* Ver todas las noticias de las categorias a las que está suscripto el cliente */
+CREATE VIEW vista_obtener_noticia_reciente AS
+    SELECT titulo, contenido, time_stamp as hora
+    FROM noticias
+    ORDER BY time_stamp DESC
+    LIMIT 1;
+
 CREATE VIEW vista_noticias_para_cliente AS
 SELECT 
   cc.id_cliente,
@@ -154,39 +160,10 @@ LEFT JOIN clientes autor ON cn.id_cliente = autor.id_cliente
 WHERE n.time_stamp >= NOW() - INTERVAL 1 HOUR;
 
 
-#--- Muestra la noticia mas reciente
-CREATE VIEW vista_obtener_noticia_reciente AS
-    SELECT titulo, contenido, time_stamp as hora
-    FROM noticias
-    ORDER BY time_stamp DESC
-    LIMIT 1;
+
 
 DELIMITER //
 
-CREATE PROCEDURE eliminar_noticia_creada_recientemente (IN id_cliente_input INT, OUT eliminado BOOL)
-BEGIN
- DECLARE noticia_borra INT;
-
-    SELECT n.id_noticia INTO noticia_borra
-    FROM noticias n
-    JOIN cliente_noticia cn ON n.id_noticia = cn.id_noticia
-    WHERE cn.id_cliente = id_cliente_input
-    ORDER BY n.time_stamp DESC
-    LIMIT 1;
-
-    IF noticia_borra IS NULL THEN
-	SET eliminado = FALSE;
-    ELSE
-    	DELETE FROM cliente_noticia
-    	WHERE id_noticia = noticia_borra AND id_cliente = id_cliente_input;
-
-	DELETE FROM noticias
-	WHERE id_noticia = noticia_borra;
-
-	SET eliminado = TRUE;
-    END IF;
-
-END;//
 
 
 
@@ -210,6 +187,63 @@ BEGIN
 END;//
 
 CREATE PROCEDURE crear_noticia (
+  IN p_id_cliente INT,
+  IN p_id_categoria INT,
+  IN p_titulo VARCHAR(255),
+  IN p_contenido TEXT,
+  OUT eliminado BOOL
+)
+BEGIN
+  DECLARE v_id_noticia INT;
+  DECLARE v_existe INT;
+
+  SELECT COUNT(*) INTO v_existe
+  FROM cliente_categoria
+  WHERE id_cliente = p_id_cliente AND id_categoria = p_id_categoria;
+
+  IF v_existe > 0 THEN
+    INSERT INTO noticias (titulo, contenido)
+    VALUES (p_titulo, p_contenido);
+
+    SET v_id_noticia = LAST_INSERT_ID();
+
+    INSERT INTO cliente_noticia (id_cliente, id_noticia)
+    VALUES (p_id_cliente, v_id_noticia);
+
+    INSERT INTO noticia_categoria (id_noticia, id_categoria)
+    VALUES (v_id_noticia, p_id_categoria);
+
+    SET eliminado = TRUE;
+  ELSE
+    SET eliminado = FALSE;
+  END IF;
+END;//
+
+CREATE PROCEDURE eliminar_noticia_creada_recientemente (IN id_cliente_input INT, OUT eliminado BOOL)
+BEGIN
+ DECLARE noticia_borra INT;
+
+    SELECT n.id_noticia INTO noticia_borra
+    FROM noticias n
+    JOIN cliente_noticia cn ON n.id_noticia = cn.id_noticia
+    WHERE cn.id_cliente = id_cliente_input
+    ORDER BY n.time_stamp DESC
+    LIMIT 1;
+
+    IF noticia_borra IS NULL THEN
+	SET eliminado = FALSE;
+    ELSE
+    	DELETE FROM cliente_noticia
+    	WHERE id_noticia = noticia_borra AND id_cliente = id_cliente_input;
+
+	DELETE FROM noticias
+	WHERE id_noticia = noticia_borra;
+
+	SET eliminado = TRUE;
+    END IF;
+END;//
+
+CREATE PROCEDURE crear_noticia_viejo (
   IN p_id_cliente INT,
   IN p_id_categoria INT,
   IN p_titulo VARCHAR(255),

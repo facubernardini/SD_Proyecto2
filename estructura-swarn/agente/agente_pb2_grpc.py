@@ -60,6 +60,11 @@ class Servicio_AgenteStub(object):
                 request_serializer=agente__pb2.DatosBorrarArea.SerializeToString,
                 response_deserializer=agente__pb2.RespuestaBorrarArea.FromString,
                 _registered_method=True)
+        self.EnviarNoticia = channel.unary_unary(
+                '/agente.Servicio_Agente/EnviarNoticia',
+                request_serializer=agente__pb2.DatosEnviarNoticia.SerializeToString,
+                response_deserializer=agente__pb2.RespuestaEnviarNoticia.FromString,
+                _registered_method=True)
         self.BorrarSuscripcionCategoria = channel.unary_unary(
                 '/agente.Servicio_Agente/BorrarSuscripcionCategoria',
                 request_serializer=agente__pb2.DatosSuscribirNuevaCategoria.SerializeToString,
@@ -111,6 +116,12 @@ class Servicio_AgenteServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def EnviarNoticia(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def BorrarSuscripcionCategoria(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -156,6 +167,11 @@ def add_Servicio_AgenteServicer_to_server(servicer, server):
                     servicer.BorrarArea,
                     request_deserializer=agente__pb2.DatosBorrarArea.FromString,
                     response_serializer=agente__pb2.RespuestaBorrarArea.SerializeToString,
+            ),
+            'EnviarNoticia': grpc.unary_unary_rpc_method_handler(
+                    servicer.EnviarNoticia,
+                    request_deserializer=agente__pb2.DatosEnviarNoticia.FromString,
+                    response_serializer=agente__pb2.RespuestaEnviarNoticia.SerializeToString,
             ),
             'BorrarSuscripcionCategoria': grpc.unary_unary_rpc_method_handler(
                     servicer.BorrarSuscripcionCategoria,
@@ -309,6 +325,33 @@ class Servicio_Agente(object):
             '/agente.Servicio_Agente/BorrarArea',
             agente__pb2.DatosBorrarArea.SerializeToString,
             agente__pb2.RespuestaBorrarArea.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def EnviarNoticia(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/agente.Servicio_Agente/EnviarNoticia',
+            agente__pb2.DatosEnviarNoticia.SerializeToString,
+            agente__pb2.RespuestaEnviarNoticia.FromString,
             options,
             channel_credentials,
             insecure,

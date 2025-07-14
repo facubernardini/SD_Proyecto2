@@ -68,6 +68,17 @@ message RespuestaBorrarArea{
   string respuesta = 1;
 }
 
+message DatosEnviarNoticia{
+  int32 cliente_id = 1;
+  string password = 2;
+  string titulo = 3;
+  string contenido = 4;
+  string area = 5;
+}
+
+message RespuestaEnviarNoticia{
+  string respuesta = 1;
+}
 
 // Servicio
 service Servicio_Agente {
@@ -76,8 +87,10 @@ service Servicio_Agente {
   rpc AgregarCategoria (DatosAgregarCategoria) returns (ResultadoAgregarCategoria);
   rpc SuscribirNuevaCategoria (DatosSuscribirNuevaCategoria) returns (ResultadoSuscribirNuevaCategoria);
   rpc BorrarArea (DatosBorrarArea) returns  (RespuestaBorrarArea);
+  rpc EnviarNoticia (DatosEnviarNoticia) returns (RespuestaEnviarNoticia);
   rpc BorrarSuscripcionCategoria (DatosSuscribirNuevaCategoria) returns (ResultadoSuscribirNuevaCategoria);
   rpc ObtenerUltimasNoticias (DatosObtenerUltimasNoticias) returns (noticiasInfo);
   rpc VerCategoriasInscripto (DatosVerCategoriasInscripto) returns (RespuestaCategoriaInscripto);
 }
+
 

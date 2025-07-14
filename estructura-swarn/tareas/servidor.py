@@ -57,20 +57,6 @@ class TareasService(tareas_pb2_grpc.TareasServiceServicer):
         else:
             return tareas_pb2.LoginResponse(success=False, mensaje_a_mostrar="Error en la contrasenia y/o usuario")
 
-    def LoginAnt(self, request, context):
-        query = "SELECT password_cliente FROM clientes WHERE id_cliente=%s"
-        self.cursor.execute(query, (request.cliente,))
-        user = self.cursor.fetchone()
-
-        if user:
-            hashed_password_db = user['password_cliente']
-            if hashed_password_db == request.password:
-                return tareas_pb2.LoginResponse(success=True, mensaje_a_mostrar="Logueado")
-            else:
-                return tareas_pb2.LoginResponse(success=False, mensaje_a_mostrar="Error en la contrasenia")
-        else:
-            return tareas_pb2.LoginResponse(success=False, mensaje_a_mostrar="Error en la contrasenia y/o usuario")
-        
     def GetNews (self, request, context):
         query = "SELECT * FROM vista_obtener_noticia_reciente"
         self.cursor.execute(query,)
@@ -88,7 +74,7 @@ class TareasService(tareas_pb2_grpc.TareasServiceServicer):
                 contenido=" ",
                 hora=" "
             )
-    
+
     def DeleteNewNews (self, request, context):
         args_delete = [request.cliente, 0]
         result = self.cursor.callproc('eliminar_noticia_creada_recientemente', args_delete)
@@ -101,8 +87,7 @@ class TareasService(tareas_pb2_grpc.TareasServiceServicer):
         return tareas_pb2.DeleteNewNewsResponse(
                 success=bool(eliminado), 
                 mensaje_a_mostrar="Noticia eliminada" if eliminado else "No se pudo eliminar"
-        )
-                
+        )   
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
