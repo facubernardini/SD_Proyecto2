@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package suscribcategoria;
+
+service Suscribe {
+  rpc SuscribeCategoria (ClientRequest) returns (Response) {}
+}
+
+message ClientRequest {
+  int32 client = 1;
+  string passw = 2;
+  string seccion = 3;
+}
+
+message Response {
+  string response = 1;
+}
